@@ -1,19 +1,23 @@
 add_library(ImGui)
 
 set(ImGui_header_files)
-list(APPEND ImGui_header_files include/imgui.h)
-list(APPEND ImGui_header_files include/imconfig.h)
-list(APPEND ImGui_header_files include/imgui_internal.h)
-list(APPEND ImGui_header_files include/imstb_rectpack.h)
-list(APPEND ImGui_header_files include/imstb_textedit.h)
-list(APPEND ImGui_header_files include/imstb_truetype.h)
+list(APPEND ImGui_header_files
+        include/imgui.h
+        include/imconfig.h
+        include/imgui_internal.h
+        include/imstb_rectpack.h
+        include/imstb_textedit.h
+        include/imstb_truetype.h
+)
 
 set(ImGui_source_files)
-list(APPEND ImGui_source_files src/imgui.cpp)
-list(APPEND ImGui_source_files src/imgui_draw.cpp)
-list(APPEND ImGui_source_files src/imgui_tables.cpp)
-list(APPEND ImGui_source_files src/imgui_widgets.cpp)
-list(APPEND ImGui_source_files src/imgui_demo.cpp)
+list(APPEND ImGui_source_files
+        src/imgui.cpp
+        src/imgui_draw.cpp
+        src/imgui_tables.cpp
+        src/imgui_widgets.cpp
+        src/imgui_demo.cpp
+)
 
 target_sources(ImGui
         PRIVATE ${ImGui_source_files}

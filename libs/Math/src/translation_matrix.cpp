@@ -3,7 +3,7 @@
 // xiaoxuetu only designed the class interface in the header file, while YQM handled the development.
 //
 
-#include "../include/translation_matrix.h"
+#include "Math/translation_matrix.h"
 
 namespace CS
 {

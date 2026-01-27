@@ -3,7 +3,7 @@
 // xiaoxuetu only designed the class interface in the header file, while YQM handled the development.
 //
 
-#include "../include/vector4d.h"
+#include "Math/vector4d.h"
 
 namespace CS
 {
