@@ -53,3 +53,14 @@ target_sources(Math
             FILES     ${vector_header_files}
                       ${matrix_header_files}
 )
+
+add_executable(vector_test
+        Test/vector_test.cpp
+        Test/matrix_test.cpp)
+
+target_link_libraries(vector_test Math)
+
+add_executable(matrix_test
+         Test/matrix_test.cpp
+         Test/vector_test.cpp)
+target_link_libraries(matrix_test Math)

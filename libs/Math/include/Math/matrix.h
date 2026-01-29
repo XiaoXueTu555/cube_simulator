@@ -20,7 +20,7 @@ class Matrix
 {
 public:
     /* 4x4 个矩阵元素 */
-    float M[4][4];
+    float M[4][4]{};
 
     /* 初始化为单位矩阵 */
     Matrix();
