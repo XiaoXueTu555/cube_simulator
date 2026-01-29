@@ -171,7 +171,7 @@ float Matrix::Determinant() const
 
 Matrix Matrix::Inverse() const
 {
-    if (std::fabs(Determinant()) < 1e-4f)
+    if (std::fabs(Determinant()) < CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:Matrix is singular (non-invertible)");
 
     Matrix result;

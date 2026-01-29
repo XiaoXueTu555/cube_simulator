@@ -111,14 +111,14 @@ Vector4d& Vector4d::operator*=(float Scale)
 
 Vector4d Vector4d::operator/(float Scale) const
 {
-    if (Scale <= 1e-4f)
+    if (Scale <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     return Vector4d{this->x / Scale, this->y / Scale, this->z / Scale, this->w / Scale};
 }
 
 Vector4d& Vector4d::operator/=(float Scale)
 {
-    if (Scale <= 1e-4f)
+    if (Scale <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     this->x /= Scale;
     this->y /= Scale;

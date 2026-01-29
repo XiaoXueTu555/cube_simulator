@@ -10,7 +10,6 @@ namespace CS
 {
 namespace Math
 {
-
 ScaleMatrix::ScaleMatrix(const Vector3d& Scale)
 {
     M[0][0] *= Scale.x;
@@ -26,6 +25,5 @@ void ScaleMatrix::Make(const Vector3d& Scale)
     M[2][2] = Scale.z;
     M[3][3] = 1.0f;
 }
-
 }
 }

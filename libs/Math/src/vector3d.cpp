@@ -125,14 +125,14 @@ Vector3d& Vector3d::operator*=(float Scale)
 
 Vector3d Vector3d::operator/(float Scale) const
 {
-    if (Scale <= 1e-4f)
+    if (Scale <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     return Vector3d{this->x / Scale, this->y / Scale, this->z / Scale};
 }
 
 Vector3d& Vector3d::operator/=(float Scale)
 {
-    if (Scale <= 1e-4f)
+    if (Scale <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     this->x /= Scale;
     this->y /= Scale;

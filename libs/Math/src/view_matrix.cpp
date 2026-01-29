@@ -9,7 +9,6 @@ namespace CS
 {
 namespace Math
 {
-
 ViewMatrix::ViewMatrix(const Vector3d& EyePosition, const Vector3d& LookAtPosition, const Vector3d& UpVector)
 {
     Make(EyePosition, LookAtPosition, UpVector);
@@ -43,8 +42,5 @@ void ViewMatrix::Make(const Vector3d& EyePosition, const Vector3d& LookAtPositio
     M[3][2] = 0.0f;
     M[3][3] = 1.0f;
 }
-
-
-
 }
 }

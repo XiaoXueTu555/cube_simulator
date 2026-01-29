@@ -4,13 +4,30 @@
 //
 
 #include "Math/perspective_projection_matrix.h"
+#include <cstring>
+#include <cmath>
 
 namespace CS
 {
 namespace Math
 {
+PerspectiveProjectionMatrix::PerspectiveProjectionMatrix(float FOV, float Near, float Far, float AspectRation)
+{
+    Make(FOV, Near, Far, AspectRation);
+}
 
+void PerspectiveProjectionMatrix::Make(float FOV, float Near, float Far, float AspectRation)
+{
+    memset(M, 0, sizeof(M));
+    float fovRad = FOV * CS_PI / 180.0f;
+    float t = Near * tan(fovRad / 2);
+    float r = AspectRation * t;
 
-
+    M[0][0] = Near / r;
+    M[1][1] = Near / t;
+    M[2][2] = (Far + Near) / (Near - Far);
+    M[2][3] = 2.0f * Far * Near / (Near - Far);
+    M[3][2] = -1.0f;
+}
 }
 }

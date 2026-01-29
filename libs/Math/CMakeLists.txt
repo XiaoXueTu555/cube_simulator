@@ -88,3 +88,9 @@ add_executable(view_matrix_test
         Test/matrix_test.cpp
         Test/vector_test.cpp)
 target_link_libraries(view_matrix_test Math)
+
+add_executable(prospective_projection_matrix_test
+        Test/prospective_projection_matrix_test.cpp
+        Test/matrix_test.cpp
+        Test/vector_test.cpp)
+target_link_libraries(prospective_projection_matrix_test Math)
