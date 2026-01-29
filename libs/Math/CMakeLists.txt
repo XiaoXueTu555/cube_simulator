@@ -82,3 +82,9 @@ add_executable(translation_matrix_test
         Test/matrix_test.cpp
         Test/vector_test.cpp)
 target_link_libraries(translation_matrix_test Math)
+
+add_executable(view_matrix_test
+        Test/view_matrix_test.cpp
+        Test/matrix_test.cpp
+        Test/vector_test.cpp)
+target_link_libraries(view_matrix_test Math)
