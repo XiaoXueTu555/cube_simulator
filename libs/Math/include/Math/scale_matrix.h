@@ -12,7 +12,6 @@ namespace CS
 {
 namespace Math
 {
-
 /*
  * 缩放矩阵
  */
@@ -33,7 +32,6 @@ public:
      */
     void Make(const Vector3d& Scale);
 };
-
 }
 }
 

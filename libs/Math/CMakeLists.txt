@@ -64,3 +64,21 @@ add_executable(matrix_test
          Test/matrix_test.cpp
          Test/vector_test.cpp)
 target_link_libraries(matrix_test Math)
+
+add_executable(scale_matrix_test
+        Test/scale_matrix_test.cpp
+        Test/matrix_test.cpp
+        Test/vector_test.cpp)
+target_link_libraries(scale_matrix_test Math)
+
+add_executable(rotation_matrix_test
+        Test/rotation_matrix_test.cpp
+        Test/matrix_test.cpp
+        Test/vector_test.cpp)
+target_link_libraries(rotation_matrix_test Math)
+
+add_executable(translation_matrix_test
+        Test/translation_matrix_test.cpp
+        Test/matrix_test.cpp
+        Test/vector_test.cpp)
+target_link_libraries(translation_matrix_test Math)
