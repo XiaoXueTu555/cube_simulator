@@ -15,7 +15,8 @@ add_subdirectory(
 add_library(SceneData
         src/camera.cpp
         src/mesh.cpp
-        src/material_manager.cpp)
+        src/material_manager.cpp
+        src/game_object.cpp)
 
 target_sources(SceneData
         PRIVATE
@@ -27,18 +28,13 @@ target_sources(SceneData
                   include/SceneData/camera.h
                   include/SceneData/mesh.h
                   include/SceneData/material_manager.h
-                  include/SceneData/model.h
+        include/SceneData/game_object.h
 )
 
 target_link_libraries(SceneData PUBLIC Math)
 
+
 # 构建 Test executable 为了 SceneData
-
 if (${TEST_SCENE_DATA})
-    add_executable(TestSceneData
-            # Test/MeshTest.cpp
-            Test/material_manager.cpp
-    )
-
-    target_link_libraries(TestSceneData SceneData)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Test)
 endif ()

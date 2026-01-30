@@ -86,4 +86,13 @@ bool MaterialManager::LoadMaterialFile(const char* filename)
     return true;
 }
 
+char MaterialManager::GetChar(const std::string& MaterialName) const
+{
+    auto it = this->material_glyph_mapper.find(MaterialName);
+
+    if (it == this->material_glyph_mapper.end())
+        return '*';
+
+    return it->second;
+}
 }

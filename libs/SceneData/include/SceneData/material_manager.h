@@ -26,6 +26,7 @@ private:
     /* 材质颜色映射表 */
     std::map<std::string, Math::Vector3d> material_color_mapper;
 public:
+    MaterialManager() = default;
     MaterialManager(const char* mtl_file, const char* glyph_map_file);
 
     /*
