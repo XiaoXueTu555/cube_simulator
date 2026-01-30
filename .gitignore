@@ -108,3 +108,6 @@ CMakeUserPresets.json
 *.iml
 out
 gen
+
+# Project Test Folder
+Test/
