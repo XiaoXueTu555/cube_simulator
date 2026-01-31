@@ -16,7 +16,8 @@ add_library(SceneData
         src/camera.cpp
         src/mesh.cpp
         src/material_manager.cpp
-        src/game_object.cpp)
+        src/game_object.cpp
+        src/scene.cpp)
 
 target_sources(SceneData
         PRIVATE
