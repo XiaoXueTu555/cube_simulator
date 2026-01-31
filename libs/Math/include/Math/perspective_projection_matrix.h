@@ -24,7 +24,7 @@ public:
      * @param Near : Near Clipping plane distance 近裁剪面距离
      * @param Far  : Far Clipping plane distance 远裁剪面距离
      */
-    PerspectiveProjectionMatrix(float FOV, float Near, float Far,float AspectRation = 16.0 / 9);
+    PerspectiveProjectionMatrix(float FOV, float Near, float Far,float AspectRation = 16.0f / 9.0f);
 
     /*
      * 构建视图矩阵
@@ -32,7 +32,7 @@ public:
      * @param Near : Near Clipping plane distance 近裁剪面距离
      * @param Far  : Far Clipping plane distance 远裁剪面距离
      */
-    void Make(float FOV, float Near, float Far,float AspectRation = 16/9);
+    void Make(float FOV, float Near, float Far,float AspectRation = 16.0f / 9.0f);
 };
 
 }
