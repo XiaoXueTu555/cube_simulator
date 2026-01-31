@@ -18,6 +18,8 @@ class PerspectiveProjectionMatrix : public Matrix
 public:
     using Matrix::M;
 
+    using Matrix::Matrix;
+
     /*
      * 构建视图矩阵
      * @param FOV 视场角

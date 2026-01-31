@@ -22,6 +22,8 @@ class ViewMatrix : public Matrix
 public:
     using Matrix::M;
 
+    using Matrix::Matrix;
+
     /*
      * 构建视图矩阵
      * @param EyePosition      摄像机位置

@@ -17,6 +17,8 @@ class RotationMatrix : public Matrix
 public:
     using Matrix::M;
 
+    using Matrix::Matrix;
+
     /*
      * 构造旋转矩阵
      * @param Rotation 三个轴上的旋转分量

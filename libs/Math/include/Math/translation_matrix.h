@@ -17,6 +17,8 @@ class TranslationMatrix : public Matrix
 public:
     using Matrix::M;
 
+    using Matrix::Matrix;
+
     /*
      *  构造平移矩阵
      *  @param Translation 偏移量（或者世界坐标）

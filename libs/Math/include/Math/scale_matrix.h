@@ -18,6 +18,8 @@ class ScaleMatrix : public Matrix
 public:
     using Matrix::M;
 
+    using Matrix::Matrix;
+
     /*
      * 构造缩放矩阵
      * @param Scale 每个坐标分量上的缩放量
