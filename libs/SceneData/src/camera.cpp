@@ -27,6 +27,16 @@ void Camera::SetUpDirection(const Math::Point& up_direction)
     this->up_direction = up_direction;
 }
 
+float& Camera::Near()
+{
+    return this->near;
+}
+
+float& Camera::Far()
+{
+    return this->far;
+}
+
 void Camera::MoveCamera(float forward, float right, float up)
 {
     /* 视角向量 */

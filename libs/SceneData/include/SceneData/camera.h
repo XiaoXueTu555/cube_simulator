@@ -17,14 +17,20 @@ public:
     Math::Point lookat_positon;
     Math::Vector3d up_direction;
 
-    Camera() = default;
+    float near = 0.3;
+    float far = 1000;
 
+
+    Camera() = default;
     Camera(Math::Point EyePosition, Math::Point LookAtPosition, Math::Vector3d UpDirection = Math::Vector3d::UpVector);
 
 public:
     void SetEyePosition(const Math::Point& eye_positon);
     void SetLookAtPosition(const Math::Point& lookat_positon);
     void SetUpDirection(const Math::Point& up_direction);
+
+    float& Near();
+    float& Far();
 
 public:
 public:
