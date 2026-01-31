@@ -8,9 +8,7 @@
 #include <cmath>
 #include <stdexcept>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 Vector4d::Vector4d(float x, float y, float z, float w): x(x), y(y), z(z), w(w) {}
 
@@ -130,7 +128,7 @@ Vector4d& Vector4d::operator/=(float Scale)
 bool Vector4d::Equal(const Vector4d& V, float Tolerance) const
 {
     if (std::fabs(x - V.x) <= Tolerance && std::fabs(y - V.y) <= Tolerance && std::fabs(z - V.z) <= Tolerance &&
-        fabs(w - V.w) <= Tolerance)
+        std::fabs(w - V.w) <= Tolerance)
         return true;
 
     return false;
@@ -144,6 +142,5 @@ bool Vector4d::operator==(const Vector4d& V) const
 Vector4d operator*(float Scale, const Vector4d& V)
 {
     return Vector4d{V.x * Scale, V.y * Scale, V.z * Scale, V.w * Scale};
-}
 }
 }

@@ -7,9 +7,7 @@
 
 #include "matrix.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /*
@@ -26,7 +24,7 @@ public:
      * @param Near : Near Clipping plane distance 近裁剪面距离
      * @param Far  : Far Clipping plane distance 远裁剪面距离
      */
-    PerspectiveProjectionMatrix(float FOV, float Near, float Far,float AspectRation = 16/9);
+    PerspectiveProjectionMatrix(float FOV, float Near, float Far,float AspectRation = 16.0 / 9);
 
     /*
      * 构建视图矩阵
@@ -37,7 +35,6 @@ public:
     void Make(float FOV, float Near, float Far,float AspectRation = 16/9);
 };
 
-}
 }
 
 #endif //MATH_PROJECTION_MATRIX_H

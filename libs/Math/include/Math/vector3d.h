@@ -9,9 +9,7 @@
 #include <initializer_list>
 #include "CSMathUtility.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /*
@@ -116,7 +114,6 @@ Vector3d operator*(float Scale, const Vector3d& V);
 
 using Point = Vector3d;
 
-}
 }
 
 #endif //CUBE_SIMULATOR_VECTOR3D_H

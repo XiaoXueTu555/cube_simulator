@@ -10,9 +10,7 @@
 
 #include "vector3d.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /*
@@ -80,7 +78,6 @@ public:
 /* 向量标量乘法 */
 Vector4d operator*(float Scale, const Vector4d& V);
 
-}
 }
 
 #endif //MATH_VECTOR4D_H

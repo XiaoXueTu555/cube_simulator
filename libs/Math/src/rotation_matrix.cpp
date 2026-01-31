@@ -6,9 +6,7 @@
 #include "Math/rotation_matrix.h"
 #include <cmath>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 RotationMatrix::RotationMatrix(const Vector3d& Rotation)
 {
@@ -17,9 +15,9 @@ RotationMatrix::RotationMatrix(const Vector3d& Rotation)
 
 void RotationMatrix::Make(const Vector3d& Rotation)
 {
-    float rx = Rotation.x * CS_PI / 180.0f;
-    float ry = Rotation.y * CS_PI / 180.0f;
-    float rz = Rotation.z * CS_PI / 180.0f;
+    float rx = Rotation.x;
+    float ry = Rotation.y;
+    float rz = Rotation.z;
 
     float cosX = cos(rx);
     float sinX = sin(rx);
@@ -47,6 +45,5 @@ void RotationMatrix::Make(const Vector3d& Rotation)
     M[3][1] = 0.0f;
     M[3][2] = 0.0f;
     M[3][3] = 1.0f;
-}
 }
 }

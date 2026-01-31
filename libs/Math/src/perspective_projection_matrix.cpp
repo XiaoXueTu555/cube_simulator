@@ -7,9 +7,7 @@
 #include <cstring>
 #include <cmath>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 PerspectiveProjectionMatrix::PerspectiveProjectionMatrix(float FOV, float Near, float Far, float AspectRation)
 {
@@ -19,8 +17,7 @@ PerspectiveProjectionMatrix::PerspectiveProjectionMatrix(float FOV, float Near, 
 void PerspectiveProjectionMatrix::Make(float FOV, float Near, float Far, float AspectRation)
 {
     memset(M, 0, sizeof(M));
-    float fovRad = FOV * CS_PI / 180.0f;
-    float t = Near * tan(fovRad / 2);
+    float t = Near * tan(FOV / 2);
     float r = AspectRation * t;
 
     M[0][0] = Near / r;
@@ -28,6 +25,5 @@ void PerspectiveProjectionMatrix::Make(float FOV, float Near, float Far, float A
     M[2][2] = (Far + Near) / (Near - Far);
     M[2][3] = 2.0f * Far * Near / (Near - Far);
     M[3][2] = -1.0f;
-}
 }
 }

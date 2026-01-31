@@ -7,9 +7,7 @@
 #define MATH_VIEW_MATRIX_H
 #include "matrix.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /*
@@ -40,7 +38,6 @@ public:
      */
     void Make(const Vector3d& EyePosition, const Vector3d& LookAtPosition, const Vector3d& UpVector);
 };
-}
 }
 
 #endif //MATH_VIEW_MATRIX_H

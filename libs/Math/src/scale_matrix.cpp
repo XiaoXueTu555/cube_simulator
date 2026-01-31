@@ -6,9 +6,7 @@
 #include "Math/scale_matrix.h"
 #include  <cstring>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 ScaleMatrix::ScaleMatrix(const Vector3d& Scale)
 {
@@ -24,6 +22,5 @@ void ScaleMatrix::Make(const Vector3d& Scale)
     M[1][1] = Scale.y;
     M[2][2] = Scale.z;
     M[3][3] = 1.0f;
-}
 }
 }

@@ -6,9 +6,7 @@
 #include "Math/translation_matrix.h"
 #include <cstring>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 TranslationMatrix::TranslationMatrix(const Vector3d& Translation)
 {
@@ -29,6 +27,5 @@ void TranslationMatrix::Make(const Vector3d& Translation)
     M[0][3] = Translation.x;
     M[1][3] = Translation.y;
     M[2][3] = Translation.z;
-}
 }
 }

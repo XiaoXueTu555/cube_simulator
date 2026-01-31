@@ -8,9 +8,7 @@
 
 #include "matrix.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /* 平移矩阵 */
@@ -31,6 +29,5 @@ public:
      */
     void Make(const Vector3d& Translation);
 };
-}
 }
 #endif //MATH_TRANSLATION_MATRIX_H

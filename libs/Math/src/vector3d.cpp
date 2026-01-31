@@ -10,9 +10,7 @@
 // #include <bits/functexcept.h>
 // #include <bits/valarray_after.h>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 const Vector3d Vector3d::ZeroVector{0, 0, 0};
 const Vector3d Vector3d::UpVector{0, 1, 0};
@@ -156,6 +154,5 @@ bool Vector3d::operator==(const Vector3d& V) const
 Vector3d operator*(float Scale, const Vector3d& V)
 {
     return Vector3d{V.x * Scale, V.y * Scale, V.z * Scale};
-}
 }
 }

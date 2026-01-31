@@ -8,9 +8,7 @@
 
 #include "matrix.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /* 旋转矩阵 */
@@ -32,7 +30,6 @@ public:
     void Make(const Vector3d& Rotation);
 };
 
-}
 }
 
 #endif //MATH_ROTATION_MATRIX_H

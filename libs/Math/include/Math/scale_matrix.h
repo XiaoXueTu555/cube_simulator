@@ -8,9 +8,7 @@
 
 #include "matrix.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 /*
  * 缩放矩阵
@@ -32,7 +30,6 @@ public:
      */
     void Make(const Vector3d& Scale);
 };
-}
 }
 
 #endif //MATH_SCALING_MATRIX_H

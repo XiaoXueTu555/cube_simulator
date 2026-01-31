@@ -3,6 +3,8 @@ project(Math)
 
 set(CMAKE_CXX_STANDARD 20)
 
+option(TEST_MATH_DATA "Enable Test for Math" OFF)
+
 # Vector
 set(vector_header_files)
 set(vector_source_files)
@@ -54,43 +56,6 @@ target_sources(Math
                       ${matrix_header_files}
 )
 
-add_executable(vector_test
-        Test/vector_test.cpp
-        Test/matrix_test.cpp)
-
-target_link_libraries(vector_test Math)
-
-add_executable(matrix_test
-         Test/matrix_test.cpp
-         Test/vector_test.cpp)
-target_link_libraries(matrix_test Math)
-
-add_executable(scale_matrix_test
-        Test/scale_matrix_test.cpp
-        Test/matrix_test.cpp
-        Test/vector_test.cpp)
-target_link_libraries(scale_matrix_test Math)
-
-add_executable(rotation_matrix_test
-        Test/rotation_matrix_test.cpp
-        Test/matrix_test.cpp
-        Test/vector_test.cpp)
-target_link_libraries(rotation_matrix_test Math)
-
-add_executable(translation_matrix_test
-        Test/translation_matrix_test.cpp
-        Test/matrix_test.cpp
-        Test/vector_test.cpp)
-target_link_libraries(translation_matrix_test Math)
-
-add_executable(view_matrix_test
-        Test/view_matrix_test.cpp
-        Test/matrix_test.cpp
-        Test/vector_test.cpp)
-target_link_libraries(view_matrix_test Math)
-
-add_executable(prospective_projection_matrix_test
-        Test/prospective_projection_matrix_test.cpp
-        Test/matrix_test.cpp
-        Test/vector_test.cpp)
-target_link_libraries(prospective_projection_matrix_test Math)
+if(${TEST_MATH_DATA})
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Test)
+endif ()

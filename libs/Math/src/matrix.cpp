@@ -8,9 +8,7 @@
 #include <cmath>
 #include <stdexcept>
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 Matrix::Matrix()
 {
@@ -131,7 +129,7 @@ Matrix& Matrix::operator*=(const Matrix& other)
 
 Vector4d Matrix::operator*(const Vector4d& V)
 {
-    Vector4d result;
+    Vector4d result{};
     result.x = M[0][0] * V.x + M[0][1] * V.y + M[0][2] * V.z + M[0][3] * V.w;
     result.y = M[1][0] * V.x + M[1][1] * V.y + M[1][2] * V.z + M[1][3] * V.w;
     result.z = M[2][0] * V.x + M[2][1] * V.y + M[2][2] * V.z + M[2][3] * V.w;
@@ -233,6 +231,5 @@ Matrix Matrix::Inverse() const
         }
     }
     return result;
-}
 }
 }

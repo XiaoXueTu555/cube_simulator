@@ -7,9 +7,7 @@
 #define MATH_MATRIX_H
 #include "vector4d.h"
 
-namespace CS
-{
-namespace Math
+namespace CS::Math
 {
 
 /*
@@ -46,7 +44,6 @@ public:
     Matrix Inverse() const;
 };
 
-}
 }
 
 #endif //MATH_MATRIX_H
