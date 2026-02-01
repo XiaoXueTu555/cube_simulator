@@ -12,7 +12,7 @@ namespace CS::Math
 
 /*
  * 4x4 Matrix
- * 要注意！矩阵乘法应用的方式使得 C = A * B 会生成一个逻辑上先应用 A 再应用 B 的变换 C。
+ * Matrix 的运算满足数学上的定义
  */
 class Matrix
 {
