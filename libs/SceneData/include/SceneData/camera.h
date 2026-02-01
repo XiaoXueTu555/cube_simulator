@@ -5,6 +5,7 @@
 #ifndef SCENEDATA_CAMERA_H
 #define SCENEDATA_CAMERA_H
 #include "Math/vector3d.h"
+#include "Math/CSMathUtility.h"
 
 
 namespace CS::SceneData
@@ -15,10 +16,13 @@ class Camera
 public:
     Math::Point eye_position;
     Math::Point lookat_positon;
-    Math::Vector3d up_direction;
+    Math::Vector3d up_direction = Math::Vector3d::UpVector;
 
+    /* 近裁剪面距离、远裁剪面距离、视场角、宽高比 */
     float near = 0.3;
     float far = 1000;
+    float fov = CS_PI / 3; //弧度
+    float aspect_ratio = 16.0f / 9.0f;
 
 
     Camera() = default;

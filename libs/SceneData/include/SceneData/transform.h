@@ -27,7 +27,7 @@ public:
      * @param Position 位置坐标
      */
 
-    Transform() = default;
+    Transform();
     Transform(const Math::Vector3d& Scale, const Math::Vector3d& Rotation, const Math::Vector3d& Position);
 };
 

@@ -6,7 +6,10 @@
 
 namespace CS::SceneData
 {
-
+Transform::Transform()
+{
+    this->Scale.Set(1, 1, 1);
+}
 
 Transform::Transform(const Math::Vector3d& Scale, const Math::Vector3d& Rotation, const Math::Vector3d& Position)
     : Scale(Scale), Rotation(Rotation), Position(Position) {}
