@@ -95,4 +95,14 @@ char MaterialManager::GetChar(const std::string& MaterialName) const
 
     return it->second;
 }
+
+Math::Vector3d MaterialManager::GetColor(const std::string& MaterialName) const
+{
+    auto it = this->material_color_mapper.find(MaterialName);
+
+    if (it == this->material_color_mapper.end())
+        return Math::Vector3d{1, 1, 1};
+
+    return it->second;
+}
 }

@@ -26,7 +26,7 @@ public:
      */
     template<typename ... Args>
     void AddGameObject(Args&& ... args);
-private:
+public:
     std::vector<GameObject> game_object_list;
     Camera camera;
 };
