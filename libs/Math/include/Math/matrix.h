@@ -34,6 +34,8 @@ public:
 
     Vector4d operator*(const Vector4d& V);
 
+    void MakeIdentity();
+
     /* 转置矩阵 */
     Matrix GetTransposed() const;
 

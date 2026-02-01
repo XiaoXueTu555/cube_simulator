@@ -12,13 +12,7 @@ namespace CS::Math
 {
 Matrix::Matrix()
 {
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            M[i][j] = (i == j) ? 1.0f : 0.0f;
-        }
-    }
+    this->MakeIdentity();
 }
 
 Matrix::Matrix(const Vector4d& InX, const Vector4d& InY, const Vector4d& InZ, const Vector4d& InW)
@@ -135,6 +129,17 @@ Vector4d Matrix::operator*(const Vector4d& V)
     result.z = M[2][0] * V.x + M[2][1] * V.y + M[2][2] * V.z + M[2][3] * V.w;
     result.w = M[3][0] * V.x + M[3][1] * V.y + M[3][2] * V.z + M[3][3] * V.w;
     return result;
+}
+
+void Matrix::MakeIdentity()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            M[i][j] = (i == j) ? 1.0f : 0.0f;
+        }
+    }
 }
 
 Matrix Matrix::GetTransposed() const
