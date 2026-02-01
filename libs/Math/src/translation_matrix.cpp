@@ -4,7 +4,6 @@
 //
 
 #include "Math/translation_matrix.h"
-#include <cstring>
 
 namespace CS::Math
 {

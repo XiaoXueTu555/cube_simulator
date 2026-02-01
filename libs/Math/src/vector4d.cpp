@@ -44,8 +44,8 @@ float Vector4d::DotProduct(const Vector4d& A, const Vector4d& B)
 void Vector4d::Normalize()
 {
     float len = this->Length();
-    if (len == 0)
-        return;
+    if (std::fabs(len) <= CS_KINDA_SMALL_NUMBER)
+        throw std::invalid_argument("Logic error:The divisor in vector length cannot be zero");
     this->x /= len;
     this->y /= len;
     this->z /= len;
@@ -109,14 +109,14 @@ Vector4d& Vector4d::operator*=(float Scale)
 
 Vector4d Vector4d::operator/(float Scale) const
 {
-    if (Scale <= CS_KINDA_SMALL_NUMBER)
+    if (std::fabs(Scale) <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     return Vector4d{this->x / Scale, this->y / Scale, this->z / Scale, this->w / Scale};
 }
 
 Vector4d& Vector4d::operator/=(float Scale)
 {
-    if (Scale <= CS_KINDA_SMALL_NUMBER)
+    if (std::fabs(Scale) <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     this->x /= Scale;
     this->y /= Scale;

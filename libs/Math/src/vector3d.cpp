@@ -7,8 +7,6 @@
 
 #include <cmath>
 #include <stdexcept>
-// #include <bits/functexcept.h>
-// #include <bits/valarray_after.h>
 
 namespace CS::Math
 {
@@ -63,8 +61,8 @@ Vector3d Vector3d::CrossProduct(const Vector3d& A, const Vector3d& B)
 void Vector3d::Normalize()
 {
     float len = this->Length();
-    if (len == 0)
-        return;
+    if (std::fabs(len) <= CS_KINDA_SMALL_NUMBER)
+        throw std::invalid_argument("Logic error:The divisor in vector length cannot be zero");
     this->x /= len;
     this->y /= len;
     this->z /= len;
@@ -123,14 +121,14 @@ Vector3d& Vector3d::operator*=(float Scale)
 
 Vector3d Vector3d::operator/(float Scale) const
 {
-    if (Scale <= CS_KINDA_SMALL_NUMBER)
+    if (std::fabs(Scale) <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     return Vector3d{this->x / Scale, this->y / Scale, this->z / Scale};
 }
 
 Vector3d& Vector3d::operator/=(float Scale)
 {
-    if (Scale <= CS_KINDA_SMALL_NUMBER)
+    if (std::fabs(Scale) <= CS_KINDA_SMALL_NUMBER)
         throw std::invalid_argument("Logic error:The divisor in vector division cannot be zero");
     this->x /= Scale;
     this->y /= Scale;
@@ -142,8 +140,8 @@ bool Vector3d::Equal(const Vector3d& V, float Tolerance) const
 {
     if (std::fabs(x - V.x) <= Tolerance && std::fabs(y - V.y) <= Tolerance && std::fabs(z - V.z) <= Tolerance)
         return true;
-    else
-        return false;
+
+    return false;
 }
 
 bool Vector3d::operator==(const Vector3d& V) const
