@@ -10,19 +10,19 @@
 
 namespace CS::SceneData
 {
-MaterialManager::MaterialManager(const char* mtl_file, const char* glyph_map_file)
+MaterialManager::MaterialManager(const std::filesystem::path& mtl_file, const std::filesystem::path& glyph_map_file)
 {
     if (!this->LoadMaterialFile(mtl_file))
     {
-        throw std::invalid_argument(std::format("{} init: read fail from {} file.", "Mesh", mtl_file));
+        throw std::invalid_argument(std::format("{} init: read fail from {} file.", "Mesh", mtl_file.string()));
     }
     if (!this->LoadGlyphMap(glyph_map_file))
     {
-        throw std::invalid_argument(std::format("{} init: read fail from {} file.", "Mesh", glyph_map_file));
+        throw std::invalid_argument(std::format("{} init: read fail from {} file.", "Mesh", glyph_map_file.string()));
     }
 }
 
-bool MaterialManager::LoadGlyphMap(const char* filename)
+bool MaterialManager::LoadGlyphMap(const std::filesystem::path& filename)
 {
     std::ifstream map_file(filename);
 
@@ -46,7 +46,7 @@ bool MaterialManager::LoadGlyphMap(const char* filename)
     return true;
 }
 
-bool MaterialManager::LoadMaterialFile(const char* filename)
+bool MaterialManager::LoadMaterialFile(const std::filesystem::path& filename)
 {
     std::ifstream mtl_file(filename);
 

@@ -9,6 +9,8 @@
 #include "material_manager.h"
 #include "transform.h"
 
+#include <filesystem>
+
 namespace CS::SceneData
 {
 
@@ -26,7 +28,7 @@ public:
     Transform transform{};
 
     GameObject() = default;
-    GameObject(const char* obj_file_name, const char* glyph_map_file_name);
+    GameObject(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name);
 
     /*
      * 加载模型文件
@@ -34,7 +36,7 @@ public:
      * mtl
      * yaml
      */
-    bool LoadGamebjectFromFile(const char* obj_file_name, const char* glyph_map_file_name);
+    bool LoadGamebjectFromFile(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name);
 
 private:
     /*
@@ -42,12 +44,12 @@ private:
      * 该函数会通过指定的obj文件加载模型数据，
      * 若obj中编码材质文件，会在obj文件同目录下自动读取。
      */
-    bool LoadObj(const char* obj_file_name);
+    bool LoadObj(const std::filesystem::path& obj_file_name);
 
     /*
      * 加载材质-字符映射文件
      */
-    bool LoadGlyphMap(const char* glyph_map_file_name);
+    bool LoadGlyphMap(const std::filesystem::path& glyph_map_file_name);
 };
 
 }

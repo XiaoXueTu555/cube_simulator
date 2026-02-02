@@ -7,6 +7,7 @@
 
 #include <map>
 #include <string>
+#include <filesystem>
 
 #include "Math/vector3d.h"
 
@@ -27,7 +28,7 @@ private:
     std::map<std::string, Math::Vector3d> material_color_mapper;
 public:
     MaterialManager() = default;
-    MaterialManager(const char* mtl_file, const char* glyph_map_file);
+    MaterialManager(const std::filesystem::path& mtl_file, const std::filesystem::path& glyph_map_file);
 
     /*
      * 加载材质-字符映射文件
@@ -36,13 +37,13 @@ public:
      * MaterialName1 : #
      * MaterialName2 : *
      */
-    bool LoadGlyphMap(const char* filename);
+    bool LoadGlyphMap(const std::filesystem::path& filename);
 
     /*
      * 加载材质文件(.mtl)
      * 读取材质的颜色值
      */
-    bool LoadMaterialFile(const char* filename);
+    bool LoadMaterialFile(const std::filesystem::path& filename);
 
     /* 从映射表中取出对应的字符
      * 若未在映射表中查找到材质则返回特定字符 '*'

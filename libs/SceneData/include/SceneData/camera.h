@@ -13,30 +13,44 @@ namespace CS::SceneData
 
 class Camera
 {
-public:
-    Math::Point eye_position;
-    Math::Point lookat_positon;
+private:
+    Math::Point eye_position{0, 0, 0};
+
+
+private:
+    Math::Point lookat_positon{0, 0, 1};
     Math::Vector3d up_direction = Math::Vector3d::UpVector;
 
     /* 近裁剪面距离、远裁剪面距离、视场角、宽高比 */
-    float near = 0.3;
-    float far = 1000;
+    float near = 0.001;
+    float far = 100;
     float fov = CS_PI / 3; //弧度
     float aspect_ratio = 16.0f / 9.0f;
 
-
-    Camera() = default;
+public:
+    Camera();
     Camera(Math::Point EyePosition, Math::Point LookAtPosition, Math::Vector3d UpDirection = Math::Vector3d::UpVector);
 
 public:
-    void SetEyePosition(const Math::Point& eye_positon);
-    void SetLookAtPosition(const Math::Point& lookat_positon);
-    void SetUpDirection(const Math::Point& up_direction);
-
-    float& Near();
-    float& Far();
+    float get_near()                         const { return near;           }
+    float get_far()                          const { return far;            }
+    float get_fov()                          const { return fov;            }
+    float get_aspect_ratio()                 const { return aspect_ratio;   }
+    const Math::Point& get_eye_position()    const { return eye_position;   }
+    const Math::Point& get_lookat_positon()  const { return lookat_positon; }
+    const Math::Vector3d& get_up_direction() const { return up_direction;   }
 
 public:
+    void set_near(float near);
+    void set_far(float far);
+    void set_fov(float fov);
+    void set_aspect_ratio(float aspect_ratio);
+    void SetEyePosition(const Math::Point& eye_position);
+    void SetLookAtPosition(const Math::Point& lookat_position);
+    void SetUpDirection(const Math::Point& up_direction);
+
+    void SetLookDirection(const Math::Point& eye_position, const Math::Point& lookat_position);
+
 public:
     /*
      * 【移动】WASD 逻辑
@@ -52,6 +66,9 @@ public:
      * pitch: 垂直旋转角度 (俯仰)
      */
     void RotateView(float yaw, float pitch, bool use_radian = false);
+
+private:
+    bool BadLookDirection() const;
 };
 
 }

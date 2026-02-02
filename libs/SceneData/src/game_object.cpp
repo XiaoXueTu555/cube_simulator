@@ -11,17 +11,17 @@
 
 namespace CS::SceneData
 {
-GameObject::GameObject(const char* obj_file_name, const char* glyph_map_file_name)
+GameObject::GameObject(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name)
 {
     this->LoadGamebjectFromFile(obj_file_name, glyph_map_file_name);
 }
 
-bool GameObject::LoadGamebjectFromFile(const char* obj_file_name, const char* glyph_map_file_name)
+bool GameObject::LoadGamebjectFromFile(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name)
 {
     return this->LoadObj(obj_file_name) && this->LoadGlyphMap(glyph_map_file_name);
 }
 
-bool GameObject::LoadObj(const char* obj_file_name)
+bool GameObject::LoadObj(const std::filesystem::path& obj_file_name)
 {
     this->mesh.Vertices.clear();
     this->mesh.Indices.clear();
@@ -91,7 +91,7 @@ bool GameObject::LoadObj(const char* obj_file_name)
     return true;
 }
 
-bool GameObject::LoadGlyphMap(const char* glyph_map_file_name)
+bool GameObject::LoadGlyphMap(const std::filesystem::path& glyph_map_file_name)
 {
     return this->material_manager.LoadGlyphMap(glyph_map_file_name);
 }
