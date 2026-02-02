@@ -16,7 +16,7 @@
 namespace CS::Renderer
 {
 
-void SceneRenderer::Renderer(const SceneData::scene& game_scene, Viewport& view_port)
+void SceneRenderer::Render(const SceneData::scene& game_scene, Viewport& view_port)
 {
     /* 缩放矩阵 */
     Math::ScaleMatrix mat_scale{};
@@ -37,15 +37,15 @@ void SceneRenderer::Renderer(const SceneData::scene& game_scene, Viewport& view_
     static Math::Matrix mat_merge;
 
     /* 构建摄像机视图矩阵 */
-    mat_view.Make(game_scene.camera.eye_position,
-        game_scene.camera.lookat_positon,
-        game_scene.camera.up_direction);
+    mat_view.Make(game_scene.camera.get_eye_position(),
+        game_scene.camera.get_lookat_positon(),
+        game_scene.camera.get_up_direction());
 
     /* 构建透视投影矩阵 */
-    mat_proj.Make(game_scene.camera.fov,
-        game_scene.camera.near,
-        game_scene.camera.far,
-        game_scene.camera.aspect_ratio);
+    mat_proj.Make(game_scene.camera.get_fov(),
+        game_scene.camera.get_near(),
+        game_scene.camera.get_far(),
+        game_scene.camera.get_aspect_ratio());
 
     for (const auto& game_object : game_scene.game_object_list)
     {

@@ -15,6 +15,6 @@
 
 /* 角度和弧度互转 */
 #define CS_AngleToRadian(angle) (angle * CS_PI / 180.0f)
-#define CS_AngleToRadian(Radian) (Radian * 180.0f / CS_PI)
+#define CS_RadianToAngle(Radian) (Radian * 180.0f / CS_PI)
 
 #endif //MATH_CSMATHUTILITY_H

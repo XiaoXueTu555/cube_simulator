@@ -20,6 +20,7 @@
 #include <stdlib.h>         // abort
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
+#include <stdexcept>
 #include <GLFW/glfw3.h>
 
 // Volk headers
@@ -40,6 +41,9 @@
 #define APP_USE_VULKAN_DEBUG_REPORT
 static VkDebugReportCallbackEXT g_DebugReport = VK_NULL_HANDLE;
 #endif
+
+#include <iostream>
+#include "SingleCube.h"
 
 // Data
 static VkAllocationCallbacks*   g_Allocator = nullptr;
@@ -395,8 +399,8 @@ int main(int, char**)
     //io.ConfigViewportsNoTaskBarIcon = true;
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
+    //ImGui::StyleColorsDark();
+    ImGui::StyleColorsLight();
 
     // Setup scaling
     ImGuiStyle& style = ImGui::GetStyle();
@@ -449,6 +453,8 @@ int main(int, char**)
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf");
     //IM_ASSERT(font != nullptr);
+
+    CS::Examples::SingleCubeInit();
 
     // Our state
     bool show_demo_window = true;
@@ -513,14 +519,13 @@ int main(int, char**)
             ImGui::End();
         }
 
-        // 3. Show another simple window.
-        if (show_another_window)
+        try
         {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
+            CS::Examples::SingleCubeRenderUI();
+        }
+        catch (std::logic_error error)
+        {
+            std::cout << error.what() << '\n';
         }
 
         // Rendering

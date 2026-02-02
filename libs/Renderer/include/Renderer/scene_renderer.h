@@ -19,7 +19,7 @@ class SceneRenderer
 public:
     SceneRenderer() = default;
 
-    void Renderer(const SceneData::scene& game_scene, Viewport& view_port);
+    void Render(const SceneData::scene& game_scene, Viewport& view_port);
 };
 
 }

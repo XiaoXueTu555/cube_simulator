@@ -3,11 +3,6 @@ project(cube_simulator)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# 构建 imgui
-set(IMGUI_DIRS ./libs/third_party/imgui)
-set(IMGUI_BACKENDS_DIRS "${IMGUI_DIRS}/backends")
-add_subdirectory(${IMGUI_DIRS})
-
 # 构建 GLFW 库
 set(GLFW_DIRS "./libs/third_party/glfw")
 
@@ -22,10 +17,17 @@ add_subdirectory(${GLFW_DIRS} ./cmake-build-debug/glfw_binary_dir EXCLUDE_FROM_A
 # 确保安装了Vulkan SDK
 find_package(Vulkan REQUIRED)
 
+# 构建Application库
+add_subdirectory(libs/app)
 
-set(LIBRARYS "glfw;Vulkan::Vulkan;ImGui")
+# 总结所有的库
+set(LIBRARYS "glfw;Vulkan::Vulkan;Example")
 
 add_executable(cube_simulator)
+
+# 指定ImGui的目录
+set(IMGUI_DIRS "./libs/third_party/imgui")
+set(IMGUI_BACKENDS_DIRS "${IMGUI_DIRS}/backends")
 
 target_sources(cube_simulator
     PRIVATE
