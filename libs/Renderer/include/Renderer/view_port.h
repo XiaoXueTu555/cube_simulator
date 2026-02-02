@@ -41,10 +41,10 @@ public:
      */
     ScreenPoint NDCToScreen(const Math::Vector4d& ndc_point) const;
 
-    /* 将NDC三角形绘制到视口中
-     * 透视除法之后得到的是Vector4d,所以参数传Vector4d
+    /* 将裁剪空间顶点构成的三角形绘制到视口中
+     * 裁剪空间是Vector4d,所以参数传Vector4d
      */
-    void DrawTrangle(Math::Vector4d ndc_p1, Math::Vector4d ndc_p2, Math::Vector4d ndc_p3,
+    void DrawTrangle(Math::Vector4d clip_p1, Math::Vector4d clip_p2, Math::Vector4d clip_p3,
                      char glyph, Math::Vector3d color);
 
     /*
@@ -66,7 +66,7 @@ private:
     unsigned int height{};
 
     /* 清空z buffer */
-    void clear_Zbuffer(float z_inf = 1.0f);
+    void clear_Zbuffer(float z_inf = 999999.0f);
 
     /* 清空char buffer */
     void clear_char_buffer(char glyph = '.');

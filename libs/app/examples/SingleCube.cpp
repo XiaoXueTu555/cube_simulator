@@ -92,15 +92,15 @@ void SingleCubeRenderUI()
 
     ImGui::Text("Cube Camera");
     static float fov = CS_PI / 3;
-    static float near = 0.1;
-    static float far = 100;
+    static float near = 2;
+    static float far = 600;
     ImGui::SliderAngle("FOV", &fov, 35, 70);
     ImGui::SliderFloat("Near", &near, 0.01f, 5.f);
-    ImGui::SliderFloat("Far", &far, 0.1f, 200.f);
+    ImGui::SliderFloat("Far", &far, 0.1f, 1000.f);
 
     ImGui::Text("Camera eye position: ");
-    Math::Vector3d camera_eye_position{0, 0, 20};
-    Math::Vector3d camera_lookat_position{0, 0, 0};
+    static Math::Vector3d camera_eye_position{0, 0, 20};
+    static Math::Vector3d camera_lookat_position{0, 0, 0};
     ImGui::SliderFloat("Cam eye pos X", &camera_eye_position.x, -50.0f, 50.0f);
     ImGui::SliderFloat("Cam eye pos Y", &camera_eye_position.y, -50.0f, 50.0f);
     ImGui::SliderFloat("Cam eye pos Z", &camera_eye_position.z, -50.0f, 50.0f);

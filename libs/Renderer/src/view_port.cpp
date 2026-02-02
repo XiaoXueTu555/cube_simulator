@@ -70,13 +70,31 @@ Viewport::ScreenPoint Viewport::NDCToScreen(const Math::Vector4d& ndc_point) con
     return screen_point;
 }
 
-void Viewport::DrawTrangle(Math::Vector4d ndc_p1, Math::Vector4d ndc_p2, Math::Vector4d ndc_p3, char glyph,
+
+/*
+ * 2026/2/2 xiaoxuetu
+ * 我写的光栅化算法一直有点儿问题，而神奇的是AI针对我的项目写出了一个正确且切实可行的光栅化函数，
+ * 所以这里暂时采用AI实现，以后有机会按照AI的思路重写一遍
+ * 感谢 GLM-4.7
+ */
+// TODO: rework function
+void Viewport::DrawTrangle(Math::Vector4d clip_p1, Math::Vector4d clip_p2, Math::Vector4d clip_p3, char glyph,
                            Math::Vector3d color)
 {
+    /* 保留1/w */
+    float inw1 = 1.0f / clip_p1.w;
+    float inw2 = 1.0f / clip_p2.w;
+    float inw3 = 1.0f / clip_p3.w;
+
+    /* 透视除法 */
+    clip_p1 /= clip_p1.w;
+    clip_p2 /= clip_p2.w;
+    clip_p3 /= clip_p3.w;
+
     /* NDC -> 屏幕坐标转换 */
-    ScreenPoint p0 = NDCToScreen(ndc_p1);
-    ScreenPoint p1 = NDCToScreen(ndc_p2);
-    ScreenPoint p2 = NDCToScreen(ndc_p3);
+    ScreenPoint p0 = NDCToScreen(clip_p1);
+    ScreenPoint p1 = NDCToScreen(clip_p2);
+    ScreenPoint p2 = NDCToScreen(clip_p3);
 
     /* 计算包围盒 */
     int min_x = std::min({p0.x, p1.x, p2.x});
@@ -102,27 +120,27 @@ void Viewport::DrawTrangle(Math::Vector4d ndc_p1, Math::Vector4d ndc_p2, Math::V
         for (int x = min_x; x <= max_x; x++)
         {
             /* 重心坐标计算 (Edge Function 叉积法) */
-            // det = 总面积的2倍
             int det = (y1 - y2) * (x0 - x2) + (x2 - x1) * (y0 - y2);
-
-            if (det == 0) continue; // 避免除以零（三角形退化）
-
-            // 计算当前像素点 相对于三个顶点的权重
+            if (det == 0) continue;
+            // 计算原始面积权重
             int w0 = (y1 - y2) * (x - x2) + (x2 - x1) * (y - y2);
             int w1 = (y2 - y0) * (x - x2) + (x0 - x2) * (y - y2);
             int w2 = det - w0 - w1;
-
-            /* 判断点是否在三角形内 */
-            if (w0 >= 0 && w1 >= 0 && w2 >= 0)
+            // 【关键修改】直接归一化，不管它的正负号
+            // u, v, w_coord 必然在 [0, 1] 之间（或者全负，但绝对值在 0 到 1）
+            float u = static_cast<float>(w0) / det;
+            float v = static_cast<float>(w1) / det;
+            float w_coord = static_cast<float>(w2) / det;
+            // 【关键修改】只判断归一化后的坐标范围
+            // 这样无论 det 是正还是负，三角形内部的点都能进来
+            if (u >= 0.0f && v >= 0.0f && w_coord >= 0.0f)
             {
-                /* 深度插值 */
-                float u = static_cast<float>(w0) / det;
-                float v = static_cast<float>(w1) / det;
-                float w = static_cast<float>(w2) / det;
-                float pixel_depth = u * z0 + v * z1 + w * z2;
-
+                // 深度插值
+                float interp_inw = u * inw1 + v * inw2 + w_coord * inw3;
+                // 还原 depth (1 / (1/w) = w)
+                // w 正比于物理距离。abs 防止符号问题
+                float pixel_depth = std::abs(1.0f / interp_inw);
                 /* 深度测试 */
-                // 如果当前像素深度比记录的深度小（更近），则绘制。
                 if (pixel_depth < this->z_buffer[y][x])
                 {
                     this->z_buffer[y][x] = pixel_depth;

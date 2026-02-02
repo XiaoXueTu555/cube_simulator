@@ -43,6 +43,8 @@ void Camera::set_fov(float fov)
 {
     if (fov <= CS_AngleToRadian(34.0f) || fov >= CS_AngleToRadian(71.0f))
         throw std::invalid_argument("logic: camera.fov invalid");
+
+    this->fov = fov;
 }
 
 void Camera::set_aspect_ratio(float aspect_ratio)

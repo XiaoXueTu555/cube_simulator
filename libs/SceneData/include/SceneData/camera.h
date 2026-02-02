@@ -22,8 +22,8 @@ private:
     Math::Vector3d up_direction = Math::Vector3d::UpVector;
 
     /* 近裁剪面距离、远裁剪面距离、视场角、宽高比 */
-    float near = 0.001;
-    float far = 100;
+    float near = 1;
+    float far = 600;
     float fov = CS_PI / 3; //弧度
     float aspect_ratio = 16.0f / 9.0f;
 
