@@ -41,6 +41,7 @@ void SingleCubeInit()
         throw std::invalid_argument("load file error: The file does not exist.");
     }
     single_cube.transform.Scale.Set(10, 10, 10);
+    single_cube.transform.Position.Set(0, 0, -20);
 
     game_scene.AddGameObject(single_cube);
 
@@ -73,50 +74,78 @@ void SingleCubeRenderUI()
     port.Clear();
 
     ImGui::Begin("Editor");
+
+    static const char* help_text = R"(
+This is a 3D scene parameter editor.
+The scene features a colorful cube with different colors on each face,
+along with a camera. You can freely adjust the cube's position, rotation, and scale.
+You can also modify the camera's position or viewing angle to observe the cube from different perspectives.
+Have fun!"
+)";
+    ImGui::TextWrapped(help_text);
+
+    ImGui::SeparatorText("Cube");
+
     ImGui::Text("Cube Transfrom");
+    static float drag_position_v_speed = 0.05;
+    static float drag_rotation_v_speed = 0.3;
+    static float drag_scale_v_speed = 0.03;
 
     ImGui::Text("Position: ");
-    ImGui::SliderFloat("P X", &game_scene.game_object_list[0].transform.Position.x, -50.0f, 50.0f);
-    ImGui::SliderFloat("P Y", &game_scene.game_object_list[0].transform.Position.y, -50.0f, 50.0f);
-    ImGui::SliderFloat("P Z", &game_scene.game_object_list[0].transform.Position.z, -50.0f, 50.0f);
+    ImGui::DragFloat("P X", &game_scene.game_object_list[0].transform.Position.x, drag_position_v_speed, -50.0f, 50.0f);
+    ImGui::DragFloat("P Y", &game_scene.game_object_list[0].transform.Position.y, drag_position_v_speed, -50.0f, 50.0f);
+    ImGui::DragFloat("P Z", &game_scene.game_object_list[0].transform.Position.z, drag_position_v_speed, -50.0f, 50.0f);
 
     ImGui::Text("Rotation: ");
-    ImGui::SliderAngle("R X", &game_scene.game_object_list[0].transform.Rotation.x);
-    ImGui::SliderAngle("R Y", &game_scene.game_object_list[0].transform.Rotation.y);
-    ImGui::SliderAngle("R Z", &game_scene.game_object_list[0].transform.Rotation.z);
+    static float rx_angle = 0;
+    static float ry_angle = 0;
+    static float rz_angle = 0;
+    ImGui::DragFloat("R X", &rx_angle, drag_rotation_v_speed, -360, 360);
+    ImGui::DragFloat("R Y", &ry_angle, drag_rotation_v_speed, -360, 360);
+    ImGui::DragFloat("R Z", &rz_angle, drag_rotation_v_speed, -360, 360);
 
     ImGui::Text("Scaling: ");
-    ImGui::SliderFloat("S X", &game_scene.game_object_list[0].transform.Scale.x, 0.1f, 20.f);
-    ImGui::SliderFloat("S Y", &game_scene.game_object_list[0].transform.Scale.y, 0.1f, 20.f);
-    ImGui::SliderFloat("S Z", &game_scene.game_object_list[0].transform.Scale.z, 0.1f, 20.f);
+    ImGui::DragFloat("S X", &game_scene.game_object_list[0].transform.Scale.x, drag_scale_v_speed, 0.1f, 20.f);
+    ImGui::DragFloat("S Y", &game_scene.game_object_list[0].transform.Scale.y, drag_scale_v_speed, 0.1f, 20.f);
+    ImGui::DragFloat("S Z", &game_scene.game_object_list[0].transform.Scale.z, drag_scale_v_speed, 0.1f, 20.f);
+
+    ImGui::SeparatorText("Camera");
 
     ImGui::Text("Cube Camera");
-    static float fov = CS_PI / 3;
+    static float fov_angle = 60;
     static float near = 2;
     static float far = 600;
-    ImGui::SliderAngle("FOV", &fov, 35, 70);
-    ImGui::SliderFloat("Near", &near, 0.01f, 5.f);
-    ImGui::SliderFloat("Far", &far, 0.1f, 1000.f);
+    ImGui::DragFloat("FOV", &fov_angle, 0.05, 35, 70);
+    ImGui::DragFloat("Near", &near, 0.001, 0.01f, 5.f);
+    ImGui::DragFloat("Far", &far, 1, 0.1f, 1000.f);
 
     ImGui::Text("Camera eye position: ");
     static Math::Vector3d camera_eye_position{0, 0, 20};
     static Math::Vector3d camera_lookat_position{0, 0, 0};
-    ImGui::SliderFloat("Cam eye pos X", &camera_eye_position.x, -50.0f, 50.0f);
-    ImGui::SliderFloat("Cam eye pos Y", &camera_eye_position.y, -50.0f, 50.0f);
-    ImGui::SliderFloat("Cam eye pos Z", &camera_eye_position.z, -50.0f, 50.0f);
+    ImGui::DragFloat("Cam eye pos X", &camera_eye_position.x, drag_position_v_speed, -50.0f, 50.0f);
+    ImGui::DragFloat("Cam eye pos Y", &camera_eye_position.y, drag_position_v_speed, -50.0f, 50.0f);
+    ImGui::DragFloat("Cam eye pos Z", &camera_eye_position.z, drag_position_v_speed, -50.0f, 50.0f);
 
     ImGui::Text("Camera lookat position: ");
-    ImGui::SliderFloat("Cam lookat pos X", &camera_lookat_position.x, -50.0f, 50.0f);
-    ImGui::SliderFloat("Cam lookat pos Y", &camera_lookat_position.y, -50.0f, 50.0f);
-    ImGui::SliderFloat("Cam lookat pos Z", &camera_lookat_position.z, -50.0f, 50.0f);
+    ImGui::DragFloat("Cam lookat pos X", &camera_lookat_position.x, drag_position_v_speed, -50.0f, 50.0f);
+    ImGui::DragFloat("Cam lookat pos Y", &camera_lookat_position.y, drag_position_v_speed, -50.0f, 50.0f);
+    ImGui::DragFloat("Cam lookat pos Z", &camera_lookat_position.z, drag_position_v_speed, -50.0f, 50.0f);
 
     ImGui::End();
 
-    game_scene.camera.set_fov(fov);
+    /* 赋值 */
+    game_scene.game_object_list[0].transform.Rotation.Set(
+        CS_AngleToRadian(rx_angle),
+        CS_AngleToRadian(ry_angle),
+        CS_AngleToRadian(rz_angle));
+
+    game_scene.camera.set_fov(CS_AngleToRadian(fov_angle));
     game_scene.camera.set_near(near);
     game_scene.camera.set_far(far);
 
     game_scene.camera.SetEyePosition(camera_eye_position);
     game_scene.camera.SetLookAtPosition(camera_lookat_position);
+
+
 }
 }

@@ -330,7 +330,7 @@ struct ImGuiDemoWindowData
     bool ShowMetrics = false;
     bool ShowDebugLog = false;
     bool ShowIDStackTool = false;
-    bool ShowStyleEditor = false;
+    bool ShowStyleEditor = true;
     bool ShowAbout = false;
 
     // Other data
