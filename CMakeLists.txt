@@ -12,7 +12,7 @@ option(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)
 option(GLFW_BUILD_DOCS "Build the GLFW documentation" OFF)
 option(GLFW_INSTALL "Generate installation target" OFF)
 option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
-add_subdirectory(${GLFW_DIRS} ./cmake-build-debug/glfw_binary_dir EXCLUDE_FROM_ALL)
+add_subdirectory(${GLFW_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/glfw EXCLUDE_FROM_ALL)
 
 # 确保安装了Vulkan SDK
 find_package(Vulkan REQUIRED)
@@ -21,7 +21,7 @@ find_package(Vulkan REQUIRED)
 add_subdirectory(libs/app)
 
 # 总结所有的库
-set(LIBRARYS "glfw;Vulkan::Vulkan;Example")
+set(LIBRARYS "glfw;Vulkan::Vulkan;ImGui")
 
 add_executable(cube_simulator)
 

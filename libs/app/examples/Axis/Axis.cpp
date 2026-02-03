@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <iostream>
 
-#include "SingleCube.h"
+#include "Axis.h"
 
 #include "SceneData/game_object.h"
 #include "SceneData/scene.h"
@@ -30,30 +30,30 @@ static CS::Renderer::SceneRenderer renderer;
 namespace CS::Examples
 {
 
-void SingleCubeInit()
+void AxisInit()
 {
-    std::filesystem::path model_path = std::filesystem::current_path() / "../libs/app/examples/model";
+    std::filesystem::path model_path = std::filesystem::current_path() / "../../../examples/Axis/model";
 
     // 单个立方体
-    static CS::SceneData::GameObject single_cube;
-    if (!single_cube.LoadGamebjectFromFile(model_path/"cube.obj", model_path / "cube.yaml"))
+    static CS::SceneData::GameObject axis;
+    if (!axis.LoadGamebjectFromFile(model_path/"axis.obj", model_path / "axis.yaml"))
     {
         throw std::invalid_argument("load file error: The file does not exist.");
     }
-    single_cube.transform.Scale.Set(10, 10, 10);
-    single_cube.transform.Position.Set(0, 0, -20);
+    axis.transform.Scale.Set(1, 1, 1);
+    axis.transform.Position.Set(0, 0, -20);
 
-    game_scene.AddGameObject(single_cube);
+    game_scene.AddGameObject(axis);
 
     /* 设定摄像机状态 */
     game_scene.camera.SetLookDirection(Math::Point{0, 0, 20}, Math::Point{0, 0, 0});
 }
 
-void SingleCubeRenderUI()
+void AxisRenderUI()
 {
     renderer.Render(game_scene, port);
     /* 渲染视口 */
-    ImGui::Begin("single cube view port");
+    ImGui::Begin("Axis view port");
     for (int i = 0; i < port.Height(); i++)
     {
         for (int j = 0; j < port.Width(); j++)
@@ -75,18 +75,9 @@ void SingleCubeRenderUI()
 
     ImGui::Begin("Editor");
 
-    static const char* help_text = R"(
-This is a 3D scene parameter editor.
-The scene features a colorful cube with different colors on each face,
-along with a camera. You can freely adjust the cube's position, rotation, and scale.
-You can also modify the camera's position or viewing angle to observe the cube from different perspectives.
-Have fun!"
-)";
-    ImGui::TextWrapped(help_text);
+    ImGui::SeparatorText("Axis");
 
-    ImGui::SeparatorText("Cube");
-
-    ImGui::Text("Cube Transfrom");
+    ImGui::Text("Axis Transfrom");
     static float drag_position_v_speed = 0.05;
     static float drag_rotation_v_speed = 0.3;
     static float drag_scale_v_speed = 0.03;
@@ -111,7 +102,7 @@ Have fun!"
 
     ImGui::SeparatorText("Camera");
 
-    ImGui::Text("Cube Camera");
+    ImGui::Text("axis Camera");
     static float fov_angle = 60;
     static float near = 2;
     static float far = 600;

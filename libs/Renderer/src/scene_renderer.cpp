@@ -60,12 +60,6 @@ void SceneRenderer::Render(const SceneData::scene& game_scene, Viewport& view_po
         // 将顶点从模型坐标系变换到裁剪空间
         for (int i = 0; i < game_object.mesh.Indices.size(); i += 3)
         {
-            std::string name = game_object.mesh.MaterialName[i / 3];
-            Math::Vector4d ORIGIN{game_object.mesh.Vertices[game_object.mesh.Indices[i + 0]]};
-            Math::Vector4d TEST1 = mat_view * ORIGIN;
-            Math::Vector4d TEST2 = mat_proj * TEST1;
-            Math::Vector4d TEST3 = TEST2 / TEST2.w;
-
             Math::Vector4d clip_space_point1 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 0]]};
             Math::Vector4d clip_space_point2 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 1]]};
             Math::Vector4d clip_space_point3 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 2]]};

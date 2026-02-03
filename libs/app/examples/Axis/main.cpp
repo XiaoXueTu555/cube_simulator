@@ -23,6 +23,8 @@
 #include <stdexcept>
 #include <GLFW/glfw3.h>
 
+#include "Axis.h"
+
 // Volk headers
 #ifdef IMGUI_IMPL_VULKAN_USE_VOLK
 #define VOLK_IMPLEMENTATION
@@ -43,6 +45,7 @@ static VkDebugReportCallbackEXT g_DebugReport = VK_NULL_HANDLE;
 #endif
 
 #include <iostream>
+#include "Axis.h"
 
 // Data
 static VkAllocationCallbacks*   g_Allocator = nullptr;
@@ -453,6 +456,8 @@ int main(int, char**)
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf");
     //IM_ASSERT(font != nullptr);
 
+    CS::Examples::AxisInit();
+
     // Our state
     bool show_demo_window = true;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -491,6 +496,15 @@ int main(int, char**)
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
+
+        try
+        {
+            CS::Examples::AxisRenderUI();
+        }
+        catch (std::logic_error error)
+        {
+            std::cout << error.what() << '\n';
+        }
 
         // Rendering
         ImGui::Render();

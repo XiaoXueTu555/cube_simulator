@@ -3,6 +3,10 @@ project(Application)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# 构建选项，构建例子
+option(APP_ENABLE_EXAMPLES "Build Application examples" OFF)
+
+
 # libs 目录路径
 set(LIBS "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
@@ -20,15 +24,8 @@ add_subdirectory(
         ${CMAKE_CURRENT_BINARY_DIR}/Renderer
 )
 
-# 构建Example库
-add_library(Example)
 
-target_sources(Example
-        PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/examples/SingleCube.cpp
-        PUBLIC
-            FILE_SET HEADERS
-            BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/examples
-            FILES   ${CMAKE_CURRENT_SOURCE_DIR}/examples/SingleCube.h
-)
-target_link_libraries(Example PUBLIC ImGui Renderer)
+# 构建 example
+if (APP_ENABLE_EXAMPLES)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
+endif ()
