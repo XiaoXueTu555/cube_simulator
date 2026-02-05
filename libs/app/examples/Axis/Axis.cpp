@@ -39,12 +39,10 @@ namespace CS::Examples
 void AxisInit()
 {
     std::filesystem::path model_path = std::filesystem::current_path() / "../../../examples/Axis/model";
-    std::filesystem::path path = R"(C:\Users\xiaoxuetu\Desktop\Blender_cube_test)";
-    model_path = path;
 
     // 单个立方体
     static CS::SceneData::GameObject axis;
-    if (!axis.LoadGamebjectFromFile(model_path/"airplane.obj", model_path / "airplane.yaml"))
+    if (!axis.LoadGamebjectFromFile(model_path/"axis.obj", model_path / "axis.yaml"))
     {
         throw std::invalid_argument("load file error: The file does not exist.");
     }
