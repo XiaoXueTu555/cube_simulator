@@ -47,6 +47,7 @@ void SceneRenderer::Render(const SceneData::scene& game_scene, Viewport& view_po
         game_scene.camera.get_far(),
         game_scene.camera.get_aspect_ratio());
 
+    /* 遍历所有物体 */
     for (const auto& game_object : game_scene.game_object_list)
     {
         /* 构建 game_object 的 Model 矩阵 */
@@ -57,9 +58,10 @@ void SceneRenderer::Render(const SceneData::scene& game_scene, Viewport& view_po
         // 合成所有的矩阵变换
         mat_merge = mat_proj * mat_view * mat_translation * mat_rotation * mat_scale;
 
-        // 将顶点从模型坐标系变换到裁剪空间
+        /* 遍历该物体的所有顶点 */
         for (int i = 0; i < game_object.mesh.Indices.size(); i += 3)
         {
+            // 将顶点从模型坐标系变换到裁剪空间
             Math::Vector4d clip_space_point1 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 0]]};
             Math::Vector4d clip_space_point2 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 1]]};
             Math::Vector4d clip_space_point3 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 2]]};

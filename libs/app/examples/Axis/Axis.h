@@ -4,12 +4,13 @@
 
 #ifndef RENDERER_SINGLECUBE_H
 #define RENDERER_SINGLECUBE_H
+#include "imgui.h"
 
 namespace CS::Examples
 {
 
 void AxisInit();
-void AxisRenderUI();
+void AxisRenderUI(ImGuiIO& io);
 
 }
 

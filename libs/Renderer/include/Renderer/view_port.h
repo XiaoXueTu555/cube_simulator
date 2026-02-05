@@ -34,7 +34,8 @@ public:
     unsigned int Height() const;
 
     /* 清空视口数据 */
-    void Clear();
+    void Clear(float fill_z_buffer = 999999.0f, char fill_glyph_buffer = ' ',
+        Math::Vector3d fill_color_buffer = Math::Vector3d{0, 0, 0});
 
     /* NDC空间 --> 屏幕坐标系
      * 透视除法之后得到的是Vector4d,所以参数传Vector4d
@@ -69,7 +70,7 @@ private:
     void clear_Zbuffer(float z_inf = 999999.0f);
 
     /* 清空char buffer */
-    void clear_char_buffer(char glyph = '.');
+    void clear_char_buffer(char glyph = ' ');
 
     /* 清空color buffer */
     void clear_color_buffer(Math::Vector3d color = Math::Vector3d{0, 0, 0});

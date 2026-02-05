@@ -51,11 +51,11 @@ unsigned int Viewport::Height() const
     return this->height;
 }
 
-void Viewport::Clear()
+void Viewport::Clear(float fill_z_buffer, char fill_glyph_buffer, Math::Vector3d fill_color_buffer)
 {
-    this->clear_Zbuffer();
-    this->clear_char_buffer();
-    this->clear_color_buffer();
+    this->clear_Zbuffer(fill_z_buffer);
+    this->clear_char_buffer(fill_glyph_buffer);
+    this->clear_color_buffer(fill_color_buffer);
 }
 
 Viewport::ScreenPoint Viewport::NDCToScreen(const Math::Vector4d& ndc_point) const

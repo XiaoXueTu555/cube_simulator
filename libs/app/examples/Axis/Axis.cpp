@@ -22,7 +22,13 @@
 static CS::SceneData::scene game_scene;
 
 // 视口
-static CS::Renderer::Viewport port{80, 45};
+static CS::Renderer::Viewport port{96, 54};
+/*
+ * 视口字体大小
+ * 视口字体大小 = custom_size * global_scale
+ */
+static float port_font_size_base = 12.0f;
+
 
 // 渲染器
 static CS::Renderer::SceneRenderer renderer;
@@ -33,10 +39,12 @@ namespace CS::Examples
 void AxisInit()
 {
     std::filesystem::path model_path = std::filesystem::current_path() / "../../../examples/Axis/model";
+    std::filesystem::path path = R"(C:\Users\xiaoxuetu\Desktop\Blender_cube_test)";
+    model_path = path;
 
     // 单个立方体
     static CS::SceneData::GameObject axis;
-    if (!axis.LoadGamebjectFromFile(model_path/"axis.obj", model_path / "axis.yaml"))
+    if (!axis.LoadGamebjectFromFile(model_path/"airplane.obj", model_path / "airplane.yaml"))
     {
         throw std::invalid_argument("load file error: The file does not exist.");
     }
@@ -49,11 +57,14 @@ void AxisInit()
     game_scene.camera.SetLookDirection(Math::Point{0, 0, 20}, Math::Point{0, 0, 0});
 }
 
-void AxisRenderUI()
+void AxisRenderUI(ImGuiIO& io)
 {
     renderer.Render(game_scene, port);
     /* 渲染视口 */
     ImGui::Begin("Axis view port");
+
+    ImGui::PushFont(nullptr, port_font_size_base);
+
     for (int i = 0; i < port.Height(); i++)
     {
         for (int j = 0; j < port.Width(); j++)
@@ -70,10 +81,25 @@ void AxisRenderUI()
                 ImGui::SameLine();
         }
     }
+
+    ImGui::PopFont();
     ImGui::End();
-    port.Clear();
 
     ImGui::Begin("Editor");
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+    ImGui::SeparatorText("View port");
+    static float fill_z_buffer = 999999.0f;
+    static char fill_glyph_buffer = '.';
+    static ImVec4 fill_color_buffer = ImVec4(0.f, 0.f, 0.f, 1.00f);
+
+    ImGui::Text("View port: Width = %d, Height = %d", port.Width(), port.Height());
+    ImGui::DragFloat("font size base", &port_font_size_base, 0.1, 1, 20);
+    ImGui::ColorEdit3(" fill clear color buffer", (float*)&fill_color_buffer);
+
+    // 清空缓冲区
+    port.Clear(fill_z_buffer, fill_glyph_buffer,
+        Math::Vector3d{fill_color_buffer.x, fill_color_buffer.y, fill_color_buffer.z});
 
     ImGui::SeparatorText("Axis");
 
@@ -91,9 +117,9 @@ void AxisRenderUI()
     static float rx_angle = 0;
     static float ry_angle = 0;
     static float rz_angle = 0;
-    ImGui::DragFloat("R X", &rx_angle, drag_rotation_v_speed, -360, 360);
-    ImGui::DragFloat("R Y", &ry_angle, drag_rotation_v_speed, -360, 360);
-    ImGui::DragFloat("R Z", &rz_angle, drag_rotation_v_speed, -360, 360);
+    ImGui::DragFloat("R X(Pitch)", &rx_angle, drag_rotation_v_speed, -360, 360);
+    ImGui::DragFloat("R Y(Yaw)", &ry_angle, drag_rotation_v_speed, -360, 360);
+    ImGui::DragFloat("R Z(Roll)", &rz_angle, drag_rotation_v_speed, -360, 360);
 
     ImGui::Text("Scaling: ");
     ImGui::DragFloat("S X", &game_scene.game_object_list[0].transform.Scale.x, drag_scale_v_speed, 0.1f, 20.f);

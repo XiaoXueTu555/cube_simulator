@@ -499,7 +499,7 @@ int main(int, char**)
 
         try
         {
-            CS::Examples::AxisRenderUI();
+            CS::Examples::AxisRenderUI(io);
         }
         catch (std::logic_error error)
         {
