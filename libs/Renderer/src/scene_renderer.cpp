@@ -19,19 +19,19 @@ namespace CS::Renderer
 void SceneRenderer::Render(const SceneData::scene& game_scene, Viewport& view_port)
 {
     /* 缩放矩阵 */
-    Math::ScaleMatrix mat_scale{};
+    static Math::ScaleMatrix mat_scale{};
 
     /* 旋转矩阵 */
-    Math::RotationMatrix mat_rotation{};
+    static Math::RotationMatrix mat_rotation{};
 
     /* 平移矩阵 */
-    Math::TranslationMatrix mat_translation{};
+    static Math::TranslationMatrix mat_translation{};
 
     /* 视图矩阵 */
-    Math::ViewMatrix mat_view;
+    static Math::ViewMatrix mat_view;
 
     /* 透视矩阵 */
-    Math::PerspectiveProjectionMatrix mat_proj;
+    static Math::PerspectiveProjectionMatrix mat_proj;
 
     /* 最终的合成矩阵 */
     static Math::Matrix mat_merge;
@@ -65,6 +65,18 @@ void SceneRenderer::Render(const SceneData::scene& game_scene, Viewport& view_po
             Math::Vector4d clip_space_point1 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 0]]};
             Math::Vector4d clip_space_point2 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 1]]};
             Math::Vector4d clip_space_point3 = mat_merge * Math::Vector4d{game_object.mesh.Vertices[game_object.mesh.Indices[i + 2]]};
+
+            /* Sutherland-Hodgman Clipping algorithm (待续...) */
+            auto is_outside = [](const Math::Vector4d& v) {
+                // 这里假设你的投影矩阵把 z 映射到了 0 到 w 之间
+                // 如果是 OpenGL 风格，范围是 -w 到 w
+                return v.z < 0 || v.z > v.w;
+            };
+            //剔除近裁剪面以及远裁剪面之外的三角形
+            if (is_outside(clip_space_point1) &&
+                is_outside(clip_space_point2) &&
+                is_outside(clip_space_point3))
+                            continue;
 
             /* NDC ---> 屏幕坐标系 */
             view_port.DrawTrangle(clip_space_point1, clip_space_point2, clip_space_point3,
