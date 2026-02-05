@@ -42,7 +42,8 @@ list(APPEND matrix_source_files
 )
 
 
-add_library(Math)
+add_library(Math
+        src/clip_plane.cpp)
 
 target_sources(Math
         PRIVATE
