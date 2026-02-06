@@ -4,41 +4,45 @@
 //
 
 #include "Math/rotation_matrix.h"
+#include "Math/rotator.h"
+#include "Math/Quaternion.h"
 #include <cmath>
 
 namespace CS::Math
 {
-RotationMatrix::RotationMatrix(const Vector3d& Rotation)
+RotationMatrix::RotationMatrix(const Quaternion& q)
 {
-    Make(Rotation);
+    Make(q);
 }
 
-void RotationMatrix::Make(const Vector3d& Rotation)
+void RotationMatrix::Make(const Quaternion& q)
 {
-    float rx = Rotation.x;
-    float ry = Rotation.y;
-    float rz = Rotation.z;
+    Quaternion Q = q;
+    Q.Normalize();
 
-    float cosX = cos(rx);
-    float sinX = sin(rx);
-    float cosY = cos(ry);
-    float sinY = sin(ry);
-    float cosZ = cos(rz);
-    float sinZ = sin(rz);
+    float bb = Q.b * Q.b;
+    float cc = Q.c * Q.c;
+    float dd = Q.d * Q.d;
+    float bc = Q.b * Q.c;
+    float bd = Q.b * Q.d;
+    float cd = Q.c * Q.d;
+    float ab = Q.a * Q.b;
+    float ac = Q.a * Q.c;
+    float ad = Q.a * Q.d;
 
-    M[0][0] = cosZ * cosY;
-    M[0][1] = cosZ * sinY * sinX - sinZ * cosX;
-    M[0][2] = cosZ * sinY * cosX + sinZ * sinX;
+    M[0][0] = 1.0f - 2.0f * (cc + dd);
+    M[0][1] = 2.0f * (bc - ad);
+    M[0][2] = 2.0f * (bd + ac);
     M[0][3] = 0.0f;
 
-    M[1][0] = sinZ * cosY;
-    M[1][1] = sinZ * sinY * sinX + cosZ * cosX;
-    M[1][2] = sinZ * sinY * cosX - cosZ * sinX;
+    M[1][0] = 2.0f * (bc + ad);
+    M[1][1] = 1.0f - 2.0f * (bb + dd);
+    M[1][2] = 2.0f * (cd - ab);
     M[1][3] = 0.0f;
 
-    M[2][0] = -sinY;
-    M[2][1] = cosY * sinX;
-    M[2][2] = cosY * cosX;
+    M[2][0] = 2.0f * (bd - ac);
+    M[2][1] = 2.0f * (cd + ab);
+    M[2][2] = 1.0f - 2.0f * (bb + cc);
     M[2][3] = 0.0f;
 
     M[3][0] = 0.0f;
@@ -46,4 +50,5 @@ void RotationMatrix::Make(const Vector3d& Rotation)
     M[3][2] = 0.0f;
     M[3][3] = 1.0f;
 }
+
 }

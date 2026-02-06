@@ -42,7 +42,11 @@ list(APPEND matrix_source_files
 )
 
 
-add_library(Math)
+add_library(Math
+        include/Math/rotator.h
+        include/Math/quaternion.h
+        src/quaternion.cpp
+        src/rotator.cpp)
 
 target_sources(Math
         PRIVATE

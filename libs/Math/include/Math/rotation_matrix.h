@@ -7,6 +7,7 @@
 #define MATH_ROTATION_MATRIX_H
 
 #include "matrix.h"
+#include "Quaternion.h"
 
 namespace CS::Math
 {
@@ -16,20 +17,20 @@ class RotationMatrix : public Matrix
 {
 public:
     using Matrix::M;
-
     using Matrix::Matrix;
 
     /*
      * 构造旋转矩阵
      * @param Rotation 三个轴上的旋转分量
      */
-    RotationMatrix(const Vector3d& Rotation);
+    RotationMatrix(const Quaternion& q); //从四元数构建旋转矩阵
 
     /*
      * 构造旋转矩阵
      * @param Rotation 三个轴上的旋转分量
      */
-    void Make(const Vector3d& Rotation);
+    void Make(const Quaternion& q);
+    // void Make(const Vector3d& Rotation);
 };
 
 }
