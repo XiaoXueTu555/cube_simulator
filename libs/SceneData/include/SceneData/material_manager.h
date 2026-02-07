@@ -37,13 +37,13 @@ public:
      * MaterialName1 : #
      * MaterialName2 : *
      */
-    bool LoadGlyphMap(const std::filesystem::path& filename);
+    void LoadGlyphMap(const std::filesystem::path& filename);
 
     /*
      * 加载材质文件(.mtl)
      * 读取材质的颜色值
      */
-    bool LoadMaterialFile(const std::filesystem::path& filename);
+    void LoadMaterialFile(const std::filesystem::path& filename);
 
     /* 从映射表中取出对应的字符
      * 若未在映射表中查找到材质则返回特定字符 '*'

@@ -16,12 +16,14 @@ GameObject::GameObject(const std::filesystem::path& obj_file_name, const std::fi
     this->LoadGamebjectFromFile(obj_file_name, glyph_map_file_name);
 }
 
-bool GameObject::LoadGamebjectFromFile(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name)
+void GameObject::LoadGamebjectFromFile(const std::filesystem::path& obj_file_name,
+                                       const std::filesystem::path& glyph_map_file_name)
 {
-    return this->LoadObj(obj_file_name) && this->LoadGlyphMap(glyph_map_file_name);
+    this->LoadObj(obj_file_name);
+    this->LoadGlyphMap(glyph_map_file_name);
 }
 
-bool GameObject::LoadObj(const std::filesystem::path& obj_file_name)
+void GameObject::LoadObj(const std::filesystem::path& obj_file_name)
 {
     this->mesh.Vertices.clear();
     this->mesh.Indices.clear();
@@ -31,7 +33,7 @@ bool GameObject::LoadObj(const std::filesystem::path& obj_file_name)
 
     if (!obj_file.is_open())
     {
-        return false;
+        throw std::logic_error{std::format("Failed to read the {} file", obj_file_name.string().c_str()).c_str()};
     }
 
     std::string material_name;
@@ -73,7 +75,7 @@ bool GameObject::LoadObj(const std::filesystem::path& obj_file_name)
             obj_file >> str;
 
             /* 计算材质所在的路径 */
-            std::filesystem::path p(obj_file_name);
+            const std::filesystem::path& p(obj_file_name);
             std::filesystem::path dir = p.parent_path();
 
             if (dir.empty())
@@ -87,12 +89,10 @@ bool GameObject::LoadObj(const std::filesystem::path& obj_file_name)
             obj_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
-
-    return true;
 }
 
-bool GameObject::LoadGlyphMap(const std::filesystem::path& glyph_map_file_name)
+void GameObject::LoadGlyphMap(const std::filesystem::path& glyph_map_file_name)
 {
-    return this->material_manager.LoadGlyphMap(glyph_map_file_name);
+    this->material_manager.LoadGlyphMap(glyph_map_file_name);
 }
 }

@@ -12,23 +12,17 @@ namespace CS::SceneData
 {
 MaterialManager::MaterialManager(const std::filesystem::path& mtl_file, const std::filesystem::path& glyph_map_file)
 {
-    if (!this->LoadMaterialFile(mtl_file))
-    {
-        throw std::invalid_argument(std::format("{} init: read fail from {} file.", "Mesh", mtl_file.string()));
-    }
-    if (!this->LoadGlyphMap(glyph_map_file))
-    {
-        throw std::invalid_argument(std::format("{} init: read fail from {} file.", "Mesh", glyph_map_file.string()));
-    }
+    this->LoadMaterialFile(mtl_file);
+    this->LoadGlyphMap(glyph_map_file);
 }
 
-bool MaterialManager::LoadGlyphMap(const std::filesystem::path& filename)
+void MaterialManager::LoadGlyphMap(const std::filesystem::path& filename)
 {
     std::ifstream map_file(filename);
 
     if (!map_file.is_open())
     {
-        return false;
+        throw std::logic_error{std::format("Failed to read the {} file", filename.string().c_str()).c_str()};
     }
 
     std::string mtl_name;
@@ -42,17 +36,15 @@ bool MaterialManager::LoadGlyphMap(const std::filesystem::path& filename)
         /* 只映射第一个字符 */
         this->material_glyph_mapper.insert({mtl_name, str.c_str()[0]});
     }
-
-    return true;
 }
 
-bool MaterialManager::LoadMaterialFile(const std::filesystem::path& filename)
+void MaterialManager::LoadMaterialFile(const std::filesystem::path& filename)
 {
     std::ifstream mtl_file(filename);
 
     if (!mtl_file.is_open())
     {
-        return false;
+        throw std::logic_error{std::format("Failed to read the {} file", filename.string().c_str()).c_str()};
     }
 
     /* 临时变量 */
@@ -82,8 +74,6 @@ bool MaterialManager::LoadMaterialFile(const std::filesystem::path& filename)
             mtl_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
-
-    return true;
 }
 
 char MaterialManager::GetChar(const std::string& MaterialName) const
