@@ -29,24 +29,21 @@ public:
     void ShowCameraWindow();
 
     /* 显示GameObject细节窗口 */
-    void ShowGameObjectWindow(const SceneData::scene& scene, int index);
+    void ShowGameObjectWindow(SceneData::scene& scene, int index);
 
     /* 所有的编辑数据 */
 private:
     //view port 显示字体的大小
     float port_font_size_base = 12.0f;
 
-    /* camera */
-    CS::SceneData::Camera camera;
+    //摄像机近裁剪面距离、远裁剪面距离、视场角、宽高比
+    float camera_near = 1;
+    float camera_far = 600;
+    float camera_fov = CS_PI / 3; //弧度
+    float camera_aspect_ratio = 16.0f / 9.0f;
 
     //每个对象的transform
     std::vector<CS::SceneData::Transform> obj_transforms;
-
-    //每个对象的顶点数
-    std::vector<int> obj_vertex_count;
-
-    //每个对象的三角面数
-    std::vector<int> obj_triangle_count;
 
     /* 窗口控制变量 */
 private:
