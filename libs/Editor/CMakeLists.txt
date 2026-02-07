@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.23)
-project(Application)
+project(Editor)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -24,6 +24,16 @@ add_subdirectory(
         ${CMAKE_CURRENT_BINARY_DIR}/Renderer
 )
 
+add_library(Editor)
+target_sources(Editor
+    PRIVATE
+        Editor.cpp
+    PUBLIC
+        FILE_SET HEADERS
+        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}
+        FILES Editor.h
+)
+target_link_libraries(Editor Renderer ImGui)
 
 # 构建 example
 if (APP_ENABLE_EXAMPLES)

@@ -17,11 +17,11 @@ add_subdirectory(${GLFW_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/glfw EXCLUDE_FROM_ALL)
 # 确保安装了Vulkan SDK
 find_package(Vulkan REQUIRED)
 
-# 构建Application库
-add_subdirectory(libs/app)
+# 构建Editor库
+add_subdirectory(libs/Editor)
 
 # 总结所有的库
-set(LIBRARYS "glfw;Vulkan::Vulkan;ImGui")
+set(LIBRARYS "glfw;Vulkan::Vulkan;ImGui;Editor")
 
 add_executable(cube_simulator)
 

@@ -114,3 +114,6 @@ Test/
 
 # 不能完全忽略obj文件，因为这个项目需要上传一些格式为.obj的模型
 !model/*.obj
+
+build/
+Build/

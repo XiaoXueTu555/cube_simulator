@@ -28,6 +28,9 @@
 #include <volk.h>
 #endif
 
+// Editor lib
+#include "Editor.h"
+
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
 // Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
@@ -455,6 +458,15 @@ int main(int, char**)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    // 编辑器
+    CS::Editor game_editor;
+    // 场景
+    static CS::SceneData::scene game_scene;
+    // 视口
+    static CS::Renderer::Viewport port{80, 45};
+    // 渲染器
+    static CS::Renderer::SceneRenderer renderer;
+
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -475,16 +487,18 @@ int main(int, char**)
             g_MainWindowData.FrameIndex = 0;
             g_SwapChainRebuild = false;
         }
-        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
-        {
-            ImGui_ImplGlfw_Sleep(10);
-            continue;
-        }
+        // if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
+        // {
+        //     ImGui_ImplGlfw_Sleep(10);
+        //     continue;
+        // }
 
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        game_editor.ShowViewPortWindow(port, io);
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
