@@ -36,6 +36,8 @@ void MaterialManager::LoadGlyphMap(const std::filesystem::path& filename)
         /* 只映射第一个字符 */
         this->material_glyph_mapper.insert({mtl_name, str.c_str()[0]});
     }
+
+    map_file.close();
 }
 
 void MaterialManager::LoadMaterialFile(const std::filesystem::path& filename)
@@ -74,6 +76,8 @@ void MaterialManager::LoadMaterialFile(const std::filesystem::path& filename)
             mtl_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
+
+    mtl_file.close();
 }
 
 char MaterialManager::GetChar(const std::string& MaterialName) const

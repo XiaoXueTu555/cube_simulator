@@ -97,6 +97,8 @@ void GameObject::LoadObj(const std::filesystem::path& obj_file_name)
             obj_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
+
+    obj_file.close();
 }
 
 void GameObject::LoadGlyphMap(const std::filesystem::path& glyph_map_file_name)

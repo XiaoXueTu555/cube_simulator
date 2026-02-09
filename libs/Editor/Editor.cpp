@@ -5,13 +5,22 @@
 #include "Editor.h"
 #include <format>
 #include <cmath>
+#include <fstream>
 
 #include "Math/rotation_matrix.h"
 
 namespace CS
 {
 Editor::Editor(ImGuiIO& io, SceneData::scene& scene, Renderer::SceneRenderer& renderer, Renderer::Viewport& port)
-    : io(io), scene(scene), renderer(renderer), port(port) {}
+    : io(io), scene(scene), renderer(renderer), port(port)
+{
+    this->LoadSaveFile();
+}
+
+Editor::~Editor()
+{
+    this->SaveRecentlyOpenedFiles();
+}
 
 void Editor::ShowViewPortWindow()
 {
@@ -58,6 +67,23 @@ void Editor::ShowEditorWindow()
             if (ImGui::MenuItem("Open", "Ctrl+Alt+O"))
             {
                 this->show_add_game_object_window = true;
+            }
+
+            if (ImGui::BeginMenu("Open Recent"))
+            {
+                for (auto i = 0; i < 5; i++)
+                {
+                    if (!this->recently_opened_obj_files[i].empty())
+                    {
+                        if (ImGui::MenuItem(this->recently_opened_obj_files[i].c_str()))
+                        {
+                            this->AddGameObjectFormFiles(this->recently_opened_obj_files[i].c_str(),
+                                                         this->recently_opened_yaml_files[i].c_str());
+                        }
+                    }
+                }
+
+                ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
@@ -246,17 +272,16 @@ void Editor::ShowAddGameObjectWindow()
     ImGui::InputText("path/filename.yaml", yaml_filename, sizeof(yaml_filename));
     if (ImGui::Button("load"))
     {
-        try
+        this->AddGameObjectFormFiles(obj_filename, yaml_filename);
+
+        // 更新最近打开文件列表
+        for (auto i = 0; i < 4; i++)
         {
-            scene.AddGameObject(obj_filename, yaml_filename);
-            this->obj_transforms.push_back(scene.game_object_list.at(scene.game_object_list.size() - 1).transform);
-            this->show_add_game_object_window = false;
+            this->recently_opened_obj_files[4 - i] = this->recently_opened_obj_files[3 - i];
+            this->recently_opened_yaml_files[4 - i] = this->recently_opened_yaml_files[3 - i];
         }
-        catch (const std::exception& error)
-        {
-            this->show_imgui_debug_log_window = true;
-            ImGui::DebugLog((error.what() + std::string{"\n"}).c_str());
-        }
+        this->recently_opened_obj_files[0] = obj_filename;
+        this->recently_opened_yaml_files[0] = yaml_filename;
     }
     ImGui::End();
 }
@@ -310,11 +335,57 @@ void Editor::MoveSceneCamera()
         this->MoveCamera(0, 0, -this->camera_up_speed * io.DeltaTime);
     }
 
+    // 鼠标控制
     if (mouse_right_key)
     {
         this->RotateView(-io.MouseDelta.x * this->camera_yaw_sensitivity,
                                 -io.MouseDelta.y * this->camera_yaw_sensitivity, true);
     }
+}
+
+void Editor::AddGameObjectFormFiles(const char* obj_filename, const char* yaml_filename)
+{
+    try
+    {
+        scene.AddGameObject(obj_filename, yaml_filename);
+        this->obj_transforms.push_back(scene.game_object_list.at(scene.game_object_list.size() - 1).transform);
+        this->show_add_game_object_window = false;
+    }
+    catch (const std::exception& error)
+    {
+        this->show_imgui_debug_log_window = true;
+        ImGui::DebugLog((error.what() + std::string{"\n"}).c_str());
+    }
+}
+
+void Editor::SaveRecentlyOpenedFiles() const
+{
+    std::ofstream file;
+    file.open("recently_file.txt");
+
+    for (auto i = 0; i < 5; i++)
+    {
+        file << this->recently_opened_obj_files[i] << '\n';
+        file << this->recently_opened_yaml_files[i] << '\n';
+    }
+
+    file.close();
+}
+
+void Editor::LoadSaveFile()
+{
+    std::ifstream file;
+    file.open("recently_file.txt");
+
+    // 可能是第一次运行而导致打不开文件，不做处理
+    if (!file.is_open())  return;
+
+    for (auto i = 0; i < 5; i++)
+    {
+        std::getline(file, this->recently_opened_obj_files[i]);
+        std::getline(file, this->recently_opened_yaml_files[i]);
+    }
+    file.close();
 }
 
 float Editor::get_camera_near() const

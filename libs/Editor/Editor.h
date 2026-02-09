@@ -20,6 +20,7 @@ class Editor
 {
 public:
     Editor(ImGuiIO& io, SceneData::scene& scene, Renderer::SceneRenderer& renderer, Renderer::Viewport& port);
+    ~Editor();
 
     /* 显示View port窗口，并渲染一个新的帧 */
     void ShowViewPortWindow();
@@ -39,8 +40,18 @@ public:
     /* 全局快捷键 */
     void GlobalShortcut();
 
+public:
+
     /* 鼠标键盘 移动场景摄像机 */
     void MoveSceneCamera();
+
+    void AddGameObjectFormFiles(const char* obj_filename, const char* yaml_filename);
+
+    /* 保存最近打开的模型文件 */
+    void SaveRecentlyOpenedFiles() const;
+
+    /* 加载保存文件 */
+    void LoadSaveFile();
 
 public:
     float get_camera_near() const;
@@ -98,6 +109,7 @@ private:
     float camera_yaw_sensitivity    = 0.001; // 水平旋转灵敏度 (偏航)，每像素移动多少度
     float camera_pitch_sensitivity  = 0.001; // 垂直旋转灵敏度 (俯仰)，每像素移动多少度
 
+
     //每个对象的transform
     std::vector<CS::SceneData::Transform> obj_transforms;
 
@@ -110,6 +122,10 @@ private:
 
     /* imgui的Debug Log窗口 */
     bool show_imgui_debug_log_window = false;
+
+    /* 编辑器保存的其他数据 */
+    std::string recently_opened_obj_files[5];
+    std::string recently_opened_yaml_files[5];
 };
 } // CS
 
