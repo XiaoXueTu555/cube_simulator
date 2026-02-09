@@ -109,6 +109,8 @@ void Editor::ShowEditorWindow()
 You can import a .obj model into the scene and use the Object Editor to adjust and view various model parameters, such as position, rotation, and scale.
 You can also use the Camera Editor to change the viewing perspective; I hope this editor brings you some joy, so go ahead and use it!
 )";
+        ImGui::Text("This is a free software! Link:");
+        ImGui::TextLinkOpenURL("https://github.com/XiaoXueTu555/cube_simulator");
         ImGui::TextWrapped(help_text);
     }
 
