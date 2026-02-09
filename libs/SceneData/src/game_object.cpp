@@ -11,7 +11,15 @@
 
 namespace CS::SceneData
 {
+GameObject::GameObject()
+{
+    this->transform.Position = Math::Vector3d{0, 0, 0};
+    this->transform.Rotation = Math::Vector3d{0, 0, 0};
+    this->transform.Scale    = Math::Vector3d{1, 1, 1};
+}
+
 GameObject::GameObject(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name)
+    : GameObject()
 {
     this->LoadGamebjectFromFile(obj_file_name, glyph_map_file_name);
 }

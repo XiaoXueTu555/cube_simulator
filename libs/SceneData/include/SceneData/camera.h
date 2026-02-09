@@ -15,9 +15,6 @@ class Camera
 {
 private:
     Math::Point eye_position{0, 0, 0};
-
-
-private:
     Math::Point lookat_positon{0, 0, 1};
     Math::Vector3d up_direction = Math::Vector3d::UpVector;
 
@@ -50,22 +47,6 @@ public:
     void SetUpDirection(const Math::Point& up_direction);
 
     void SetLookDirection(const Math::Point& eye_position, const Math::Point& lookat_position);
-
-public:
-    /*
-     * 【移动】WASD 逻辑
-     * forward: 前进距离 (+前进, -后退)
-     * right:   右移距离 (+右, -左)
-     * up:      上升距离 (+上, -下)
-     */
-    void MoveCamera(float forward, float right, float up);
-
-    /*
-     * 【旋转】鼠标视角逻辑
-     * yaw:   水平旋转角度 (偏航)
-     * pitch: 垂直旋转角度 (俯仰)
-     */
-    void RotateView(float yaw, float pitch, bool use_radian = false);
 
 private:
     bool BadLookDirection() const;

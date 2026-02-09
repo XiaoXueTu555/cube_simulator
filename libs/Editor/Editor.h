@@ -19,33 +19,66 @@ namespace CS
 class Editor
 {
 public:
+    Editor(ImGuiIO& io, SceneData::scene& scene, Renderer::SceneRenderer& renderer, Renderer::Viewport& port);
+
     /* 显示View port窗口，并渲染一个新的帧 */
-    void ShowViewPortWindow(const Renderer::Viewport& port, const ImGuiIO& io);
+    void ShowViewPortWindow();
 
     /* 显示Editor窗口 */
-    void ShowEditorWindow(const ImGuiIO& io, Renderer::SceneRenderer& renderer, SceneData::scene& scene,
-                          Renderer::Viewport& port);
+    void ShowEditorWindow();
 
     /* 显示摄像机细节窗口 */
     void ShowCameraWindow();
 
     /* 显示GameObject细节窗口 */
-    void ShowGameObjectWindow(SceneData::scene& scene);
+    void ShowGameObjectWindow();
 
     /* 显示添加GameObject窗口 */
-    void ShowAddGameObjectWindow(SceneData::scene& scene);
+    void ShowAddGameObjectWindow();
+
+    /* 全局快捷键 */
+    void GlobalShortcut();
+
+    /* 鼠标键盘 移动场景摄像机 */
+    void MoveSceneCamera();
 
 public:
     float get_camera_near() const;
     float get_camera_far() const;
     float get_camera_fov() const;
     float get_camera_aspect_ratio() const;
+
+    const Math::Vector3d& get_camera_eye_position() const;
+    const Math::Vector3d& get_camera_lookat_position() const;
+
     const std::vector<SceneData::Transform>& get_obj_transforms() const;
 
-    /* 所有的编辑数据 */
+public:
+    /*
+     * 【移动】WASD 逻辑
+     * forward: 前进距离 (+前进, -后退)
+     * right:   右移距离 (+右, -左)
+     * up:      上升距离 (+上, -下)
+     */
+    void MoveCamera(float forward, float right, float up);
+
+    /*
+     * 【旋转】鼠标视角逻辑
+     * yaw:   水平旋转角度 (偏航)
+     * pitch: 垂直旋转角度 (俯仰)
+     */
+    void RotateView(float yaw, float pitch, bool use_radian = false);
+
 private:
-    //view port 显示字体的大小
-    float port_font_size_base = 12.0f;
+    /* 外部的场景和渲染器 */
+    ImGuiIO& io;
+    SceneData::scene& scene;
+    Renderer::SceneRenderer& renderer;
+    Renderer::Viewport& port;
+
+
+    /* 所有的编辑数据 */
+    float port_font_size_base = 12.0f; //view port 显示字体的大小
 
     //摄像机近裁剪面距离、远裁剪面距离、视场角、宽高比
     float camera_near = 1;
@@ -54,18 +87,29 @@ private:
     float camera_aspect_ratio = 16.0f / 9.0f;
 
     // 摄像机视角参数
-    Math::Vector3d camera_eye_position{0, 0, 30};
+    Math::Vector3d camera_eye_position{0, 0, -30};
     Math::Vector3d camera_lookat_position{0, 0, 0};
+    Math::Vector3d camera_up_direction = Math::Vector3d::UpVector;
+
+    /* view port窗口中移动摄像机的速度 */
+    float camera_forward_speed      = 3; // W,S 每秒移动距离
+    float camera_right_speed        = 3; // A,D 每秒移动距离
+    float camera_up_speed           = 3; // Q,E 每秒移动距离
+    float camera_yaw_sensitivity    = 0.001; // 水平旋转灵敏度 (偏航)，每像素移动多少度
+    float camera_pitch_sensitivity  = 0.001; // 垂直旋转灵敏度 (俯仰)，每像素移动多少度
 
     //每个对象的transform
     std::vector<CS::SceneData::Transform> obj_transforms;
 
+
     /* 窗口控制变量 */
-private:
     bool show_view_port_window = true;
     bool show_camera_window = false;
     bool show_game_object_window = false;
     bool show_add_game_object_window = false;
+
+    /* imgui的Debug Log窗口 */
+    bool show_imgui_debug_log_window = false;
 };
 } // CS
 

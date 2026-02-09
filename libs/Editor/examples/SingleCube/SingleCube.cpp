@@ -35,18 +35,22 @@ void SingleCubeInit()
     std::filesystem::path model_path = std::filesystem::current_path() / "../../../examples/SingleCube/model";
 
     // 单个立方体
-    static CS::SceneData::GameObject single_cube;
-    if (!single_cube.LoadGamebjectFromFile(model_path/"cube.obj", model_path / "cube.yaml"))
+    static CS::SceneData::GameObject cube;
+    try
     {
-        throw std::invalid_argument("load file error: The file does not exist.");
+        cube.LoadGamebjectFromFile(model_path/"cube.obj", model_path / "cube.yaml");
+        cube.transform.Scale.Set(10, 10, 10);
+        cube.transform.Position.Set(0, 0, -20);
+
+        game_scene.AddGameObject(cube);
+
+        /* 设定摄像机状态 */
+        game_scene.camera.SetLookDirection(Math::Point{0, 0, 20}, Math::Point{0, 0, 0});
     }
-    single_cube.transform.Scale.Set(10, 10, 10);
-    single_cube.transform.Position.Set(0, 0, -20);
-
-    game_scene.AddGameObject(single_cube);
-
-    /* 设定摄像机状态 */
-    game_scene.camera.SetLookDirection(Math::Point{0, 0, 20}, Math::Point{0, 0, 0});
+    catch (const std::logic_error& error)
+    {
+        ImGui::DebugLog(error.what());
+    }
 }
 
 void SingleCubeRenderUI()

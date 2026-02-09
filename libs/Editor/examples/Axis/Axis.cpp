@@ -40,19 +40,23 @@ void AxisInit()
 {
     std::filesystem::path model_path = std::filesystem::current_path() / "../../../examples/Axis/model";
 
-    // 单个立方体
+    // 坐标轴模型
     static CS::SceneData::GameObject axis;
-    if (!axis.LoadGamebjectFromFile(model_path/"axis.obj", model_path / "axis.yaml"))
+    try
     {
-        throw std::invalid_argument("load file error: The file does not exist.");
+        axis.LoadGamebjectFromFile(model_path/"axis.obj", model_path / "axis.yaml");
+        axis.transform.Scale.Set(1, 1, 1);
+        axis.transform.Position.Set(0, 0, -20);
+
+        game_scene.AddGameObject(axis);
+
+        /* 设定摄像机状态 */
+        game_scene.camera.SetLookDirection(Math::Point{0, 0, 20}, Math::Point{0, 0, 0});
     }
-    axis.transform.Scale.Set(1, 1, 1);
-    axis.transform.Position.Set(0, 0, -20);
-
-    game_scene.AddGameObject(axis);
-
-    /* 设定摄像机状态 */
-    game_scene.camera.SetLookDirection(Math::Point{0, 0, 20}, Math::Point{0, 0, 0});
+    catch (const std::logic_error& error)
+    {
+        ImGui::DebugLog(error.what());
+    }
 }
 
 void AxisRenderUI(ImGuiIO& io)

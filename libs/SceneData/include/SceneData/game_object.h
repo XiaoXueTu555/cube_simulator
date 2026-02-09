@@ -25,9 +25,9 @@ public:
     MaterialManager material_manager;
 
     /* 变换 */
-    Transform transform{};
+    Transform transform;
 
-    GameObject() = default;
+    GameObject();
     GameObject(const std::filesystem::path& obj_file_name, const std::filesystem::path& glyph_map_file_name);
 
     /*

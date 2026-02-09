@@ -458,14 +458,15 @@ int main(int, char**)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    // 编辑器
-    CS::Editor game_editor;
     // 场景
     static CS::SceneData::scene game_scene;
     // 视口
     static CS::Renderer::Viewport port{80, 45};
     // 渲染器
     static CS::Renderer::SceneRenderer renderer;
+
+    // 编辑器
+    CS::Editor game_editor{io, game_scene, renderer, port};
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -499,7 +500,7 @@ int main(int, char**)
         ImGui::NewFrame();
 
         renderer.Render(game_scene, port); // 渲染新的一帧
-        game_editor.ShowEditorWindow(io, renderer, game_scene, port);
+        game_editor.ShowEditorWindow();
         port.Clear(); // 清空缓冲区
 
         // 根据编辑器数据更改场景数据
@@ -507,6 +508,9 @@ int main(int, char**)
         game_scene.camera.set_far(game_editor.get_camera_far());
         game_scene.camera.set_fov(CS_AngleToRadian(game_editor.get_camera_fov()));
         game_scene.camera.set_aspect_ratio(game_editor.get_camera_aspect_ratio());
+
+        game_scene.camera.SetEyePosition(game_editor.get_camera_eye_position());
+        game_scene.camera.SetLookAtPosition(game_editor.get_camera_lookat_position());
 
         for (auto i = 0; i < game_scene.game_object_list.size(); i++)
         {
