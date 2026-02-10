@@ -169,9 +169,9 @@ void Editor::ShowCameraWindow()
         return;
 
     ImGui::Begin("Camera Window", &this->show_camera_window);
-    ImGui::DragFloat("Camera Near",&camera_near,CS_KINDA_SMALL_NUMBER,5);
-    ImGui::DragFloat("Camera Far",&camera_far,CS_KINDA_SMALL_NUMBER,1000);
-    ImGui::DragFloat("Camera FOV",&camera_fov,CS_AngleToRadian(34.0f),CS_AngleToRadian(71.0f));
+    ImGui::DragFloat("Camera Near",&camera_near,0.001, CS_KINDA_SMALL_NUMBER * 10,5, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+    ImGui::DragFloat("Camera Far",&camera_far,0.01,CS_KINDA_SMALL_NUMBER * 10,1000, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+    ImGui::DragFloat("Camera FOV",&camera_fov,0.01,CS_AngleToRadian(34.0f),CS_AngleToRadian(71.0f));
     ImGui::Text("Camera Aspect Ratio: 16.0f / 9.0f");
     ImGui::Text("");
 
@@ -187,6 +187,16 @@ void Editor::ShowCameraWindow()
     ImGui::DragFloat("Lookat X", &this->camera_lookat_position.x, drag_position_v_speed,-300,300);
     ImGui::DragFloat("Lookat Y", &this->camera_lookat_position.y, drag_position_v_speed,-300,300);
     ImGui::DragFloat("Lookat Z", &this->camera_lookat_position.z, drag_position_v_speed,-300,300);
+
+    if (ImGui::TreeNode("Move/Around Speed"))
+    {
+        ImGui::DragFloat("Camera forward", &this->camera_forward_speed, 0.001,0.01, 10);
+        ImGui::DragFloat("Camera right", &this->camera_right_speed, 0.001,0.01,10);
+        ImGui::DragFloat("Camera up", &this->camera_up_speed, 0.001, 0.01, 10);
+        ImGui::DragFloat("Camera yaw sensitivity", &this->camera_yaw_sensitivity, 0.0001, 0.0001, 0.1);
+        ImGui::DragFloat("Camera pitch sensitivity", &this->camera_pitch_sensitivity, 0.0001, 0.0001, 0.1);
+        ImGui::TreePop();
+    }
 
     ImGui::End();
 }

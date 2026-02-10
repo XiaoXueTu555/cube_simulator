@@ -98,7 +98,7 @@ private:
     float camera_aspect_ratio = 16.0f / 9.0f;
 
     // 摄像机视角参数
-    Math::Vector3d camera_eye_position{0, 0, -10};
+    Math::Vector3d camera_eye_position{0, 0, 10};
     Math::Vector3d camera_lookat_position{0, 0, 0};
     Math::Vector3d camera_up_direction = Math::Vector3d::UpVector;
 
