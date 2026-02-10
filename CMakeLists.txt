@@ -3,6 +3,16 @@ project(cube_simulator)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (MSVC)
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+endif ()
+
+
 # 构建 GLFW 库
 set(GLFW_DIRS "./libs/third_party/glfw")
 

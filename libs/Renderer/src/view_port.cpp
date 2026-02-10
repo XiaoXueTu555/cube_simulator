@@ -81,6 +81,13 @@ Viewport::ScreenPoint Viewport::NDCToScreen(const Math::Vector4d& ndc_point) con
 void Viewport::DrawTrangle(Math::Vector4d clip_p1, Math::Vector4d clip_p2, Math::Vector4d clip_p3, char glyph,
                            Math::Vector3d color)
 {
+    if (std::fabs(clip_p1.w) < CS_KINDA_SMALL_NUMBER ||
+        std::fabs(clip_p2.w) < CS_KINDA_SMALL_NUMBER ||
+        std::fabs(clip_p3.w) < CS_KINDA_SMALL_NUMBER)
+    {
+        return;
+    }
+
     /* 保留1/w */
     float inw1 = 1.0f / clip_p1.w;
     float inw2 = 1.0f / clip_p2.w;

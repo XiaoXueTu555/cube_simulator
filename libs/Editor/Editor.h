@@ -92,13 +92,13 @@ private:
     float port_font_size_base = 12.0f; //view port 显示字体的大小
 
     //摄像机近裁剪面距离、远裁剪面距离、视场角、宽高比
-    float camera_near = 1;
+    float camera_near = 0.2;
     float camera_far = 600;
     float camera_fov = 60; //角度
     float camera_aspect_ratio = 16.0f / 9.0f;
 
     // 摄像机视角参数
-    Math::Vector3d camera_eye_position{0, 0, -30};
+    Math::Vector3d camera_eye_position{0, 0, -10};
     Math::Vector3d camera_lookat_position{0, 0, 0};
     Math::Vector3d camera_up_direction = Math::Vector3d::UpVector;
 

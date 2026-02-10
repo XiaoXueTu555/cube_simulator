@@ -112,6 +112,10 @@ You can also use the Camera Editor to change the viewing perspective; I hope thi
         ImGui::Text("This is a free software! Link:");
         ImGui::TextLinkOpenURL("https://github.com/XiaoXueTu555/cube_simulator");
         ImGui::TextWrapped(help_text);
+        ImGui::TextColored(ImVec4{1, 0, 0, 1},
+            "Just a heads-up: right-clicking activates camera\n control mode,"
+            " so your mouse movements will change\n the viewing angle!"
+            " You can also use WASDQE to move the camera\n around—this is probably the most useful feature!");
     }
 
     // 开启窗口选项
@@ -223,34 +227,51 @@ void Editor::ShowGameObjectWindow()
         ImGui::SeparatorText("Transform");
         if (ImGui::TreeNode("Scale"))
         {
-            static float drag_scale_v_speed = 0.01;
-            ImGui::DragFloat("XScale",&obj_transforms[item_selected_idx].Scale.x, drag_scale_v_speed, 0.01,100);
-            ImGui::DragFloat("YScale",&obj_transforms[item_selected_idx].Scale.y, drag_scale_v_speed,0.01,100);
-            ImGui::DragFloat("ZScale",&obj_transforms[item_selected_idx].Scale.z, drag_scale_v_speed,0.01,100);
+            auto& scale = this->obj_transforms[item_selected_idx].Scale;
+            static float drag_scale_v_speed = 0.01; //滑动速率
+
+            if (float uniform_scale = scale.x;
+                ImGui::DragFloat("Uniform Scale", &uniform_scale, drag_scale_v_speed, 0.01, 20))
+            {
+                // 当这个滑块变动时，等比例缩放
+                scale.x = scale.y = scale.z = uniform_scale;
+            }
+            ImGui::Separator();
+
+            ImGui::DragFloat("XScale",&scale.x, drag_scale_v_speed, 0.01,20);
+            ImGui::DragFloat("YScale",&scale.y, drag_scale_v_speed,0.01,20);
+            ImGui::DragFloat("ZScale",&scale.z, drag_scale_v_speed,0.01,20);
             ImGui::TreePop();
         }
+
         if (ImGui::TreeNode("Rotation"))
         {
-            static float drag_rotation_v_speed = 0.3;
-            ImGui::DragFloat("XRotation", &obj_transforms[item_selected_idx].Rotation.x, drag_rotation_v_speed, 0,
-                             360, "%.1f", ImGuiSliderFlags_WrapAround);
-            ImGui::DragFloat("YRotation", &obj_transforms[item_selected_idx].Rotation.y, drag_rotation_v_speed, 0,
-                             360, "%.1f", ImGuiSliderFlags_WrapAround);
-            ImGui::DragFloat("ZRotation", &obj_transforms[item_selected_idx].Rotation.z, drag_rotation_v_speed, 0,
-                             360, "%.1f", ImGuiSliderFlags_WrapAround);
+            auto& rotation = this->obj_transforms[item_selected_idx].Rotation;
+            static float drag_rotation_v_speed = 0.3; //滑动速率
+
+            ImGui::DragFloat("XRotation", &rotation.x, drag_rotation_v_speed, 0, 360, "%.1f",
+                             ImGuiSliderFlags_WrapAround);
+            ImGui::DragFloat("YRotation", &rotation.y, drag_rotation_v_speed, 0, 360, "%.1f",
+                             ImGuiSliderFlags_WrapAround);
+            ImGui::DragFloat("ZRotation", &rotation.z, drag_rotation_v_speed, 0, 360, "%.1f",
+                             ImGuiSliderFlags_WrapAround);
             ImGui::TreePop();
         }
+
         if (ImGui::TreeNode("Position"))
         {
-            static float drag_position_v_speed = 0.01;
-            ImGui::DragFloat("XPosition", &obj_transforms[item_selected_idx].Position.x, drag_position_v_speed,-300,300);
-            ImGui::DragFloat("YPosition", &obj_transforms[item_selected_idx].Position.y, drag_position_v_speed,-300,300);
-            ImGui::DragFloat("ZPosition", &obj_transforms[item_selected_idx].Position.z, drag_position_v_speed,-300,300);
+            auto& position = this->obj_transforms[item_selected_idx].Position;
+            static float drag_position_v_speed = 0.01; //滑动速率
+
+            ImGui::DragFloat("XPosition", &position.x, drag_position_v_speed,-300,300);
+            ImGui::DragFloat("YPosition", &position.y, drag_position_v_speed,-300,300);
+            ImGui::DragFloat("ZPosition", &position.z, drag_position_v_speed,-300,300);
             ImGui::TreePop();
         }
 
         ImGui::Text("");
         ImGui::SeparatorText("Other information");
+
         int vetrix_count = scene.game_object_list[item_selected_idx].mesh.Vertices.size();
         ImGui::Text(std::format("vertex count: {}", vetrix_count).c_str());
 
