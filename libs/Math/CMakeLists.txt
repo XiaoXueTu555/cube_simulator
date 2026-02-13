@@ -43,7 +43,8 @@ list(APPEND matrix_source_files
 
 
 add_library(Math
-        src/clip_plane.cpp)
+        src/clip_plane.cpp
+        src/lerp.cpp)
 
 target_sources(Math
         PRIVATE

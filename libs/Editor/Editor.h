@@ -12,6 +12,9 @@
 #include "SceneData/scene.h"
 #include "Renderer/view_port.h"
 #include "Renderer/scene_renderer.h"
+
+#include "camera_anim.h"
+#include "game_object_anim.h"
 #include "imgui.h"
 
 namespace CS
@@ -40,6 +43,14 @@ public:
     /* 全局快捷键 */
     void GlobalShortcut();
 
+    /* 动画编辑窗口 */
+public:
+    /* 展示摄像机动画编辑窗口 */
+    void ShowCameraAnimWindow();
+
+    /* 展示GameObject动画编辑窗口 */
+    void ShowGameObjectAnimWindow();
+
 public:
 
     /* 鼠标键盘 移动场景摄像机 */
@@ -53,6 +64,10 @@ public:
     /* 加载保存文件 */
     void LoadSaveFile();
 
+    /* 更新动画 */
+    void UpdateAnimations();
+
+
 public:
     float get_camera_near() const;
     float get_camera_far() const;
@@ -64,6 +79,8 @@ public:
 
     const std::vector<SceneData::Transform>& get_obj_transforms() const;
 
+    /* 用户是否关闭程序 */
+    bool get_exit_the_program() const;
 public:
     /*
      * 【移动】WASD 逻辑
@@ -109,9 +126,14 @@ private:
     float camera_yaw_sensitivity    = 0.001; // 水平旋转灵敏度 (偏航)，每像素移动多少度
     float camera_pitch_sensitivity  = 0.001; // 垂直旋转灵敏度 (俯仰)，每像素移动多少度
 
+    CameraAnim camera_anim; //摄像机动画参数
+
 
     //每个对象的transform
     std::vector<CS::SceneData::Transform> obj_transforms;
+
+    // 存储每个对象的动画数据，索引必须与 obj_transforms 和 scene.game_object_list 严格对应
+    std::vector<CS::GameObjectAnim> obj_anims;
 
 
     /* 窗口控制变量 */
@@ -120,12 +142,17 @@ private:
     bool show_game_object_window = false;
     bool show_add_game_object_window = false;
 
+    /* 动画窗口 */
+    bool show_camera_anim_window = false;
+    bool show_game_object_anim_window = false;
+
     /* imgui的Debug Log窗口 */
     bool show_imgui_debug_log_window = false;
 
     /* 编辑器保存的其他数据 */
     std::string recently_opened_obj_files[5];
     std::string recently_opened_yaml_files[5];
+    bool exit_the_program = false;
 };
 } // CS
 

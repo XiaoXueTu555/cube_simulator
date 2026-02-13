@@ -3,6 +3,7 @@
 //
 
 #include "Editor.h"
+#include "Math/lerp.h"
 #include <format>
 #include <cmath>
 #include <fstream>
@@ -27,7 +28,11 @@ void Editor::ShowViewPortWindow()
     if (!this->show_view_port_window)
         return;
 
-    this->MoveSceneCamera();
+    //移动摄像机
+    if (!this->camera_anim.is_playing)
+    {
+        this->MoveSceneCamera();
+    }
 
     ImGui::Begin("Game View Port Window", &this->show_view_port_window, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -56,7 +61,8 @@ void Editor::ShowViewPortWindow()
 
 void Editor::ShowEditorWindow()
 {
-    this->GlobalShortcut();
+    this->GlobalShortcut(); //全局快捷键
+    this->UpdateAnimations(); //更新动画
 
     ImGui::Begin("Editor Window", nullptr, ImGuiWindowFlags_MenuBar);
 
@@ -99,6 +105,15 @@ void Editor::ShowEditorWindow()
             }
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Other"))
+        {
+            if (ImGui::MenuItem("Exit the program", "Ctrl+Alt+Q"))
+            {
+                this->exit_the_program = true;
+            }
+            ImGui::EndMenu();
+        }
         ImGui::EndMenuBar();
     }
 
@@ -124,6 +139,28 @@ You can also use the Camera Editor to change the viewing perspective; I hope thi
         ImGui::Checkbox("Game View Port window", &this->show_view_port_window);
         ImGui::Checkbox("Camera Window", &this->show_camera_window);
         ImGui::Checkbox("GameObject Window", &this->show_game_object_window);
+
+        ImGui::SeparatorText("anim");
+
+        ImGui::Checkbox("Camera Anim Window", &this->show_camera_anim_window);
+        ImGui::Checkbox("G OBJ Anim Window", &this->show_game_object_anim_window);
+        if (ImGui::Button("Play All Anims"))
+        {
+            // 重置状态
+            camera_anim.elapsed_time = 0.0f;
+            camera_anim.is_playing = true;
+
+            this->camera_eye_position = camera_anim.start_eye;
+
+            for (auto& anim : this->obj_anims)
+            {
+                if (anim.is_enabled)
+                {
+                    anim.is_playing = true;
+                    anim.elapsed_time = 0.0f; // 重置时间
+                }
+            }
+        }
     }
 
     if (ImGui::CollapsingHeader("Render info"))
@@ -158,6 +195,8 @@ You can also use the Camera Editor to change the viewing perspective; I hope thi
     this->ShowCameraWindow();
     this->ShowGameObjectWindow();
     this->ShowAddGameObjectWindow();
+    this->ShowCameraAnimWindow();
+    this->ShowGameObjectAnimWindow();
 
     if (this->show_imgui_debug_log_window)
         ImGui::ShowDebugLogWindow(&this->show_imgui_debug_log_window);
@@ -171,7 +210,7 @@ void Editor::ShowCameraWindow()
     ImGui::Begin("Camera Window", &this->show_camera_window);
     ImGui::DragFloat("Camera Near",&camera_near,0.001, CS_KINDA_SMALL_NUMBER * 10,5, "%.3f", ImGuiSliderFlags_AlwaysClamp);
     ImGui::DragFloat("Camera Far",&camera_far,0.01,CS_KINDA_SMALL_NUMBER * 10,1000, "%.3f", ImGuiSliderFlags_AlwaysClamp);
-    ImGui::DragFloat("Camera FOV",&camera_fov,0.01,CS_AngleToRadian(34.0f),CS_AngleToRadian(71.0f));
+    ImGui::DragFloat("Camera FOV",&camera_fov,0.01,CS_AngleToRadian(34.0f),CS_AngleToRadian(71.0f), "%.3f", ImGuiSliderFlags_AlwaysClamp);
     ImGui::Text("Camera Aspect Ratio: 16.0f / 9.0f");
     ImGui::Text("");
 
@@ -287,6 +326,21 @@ void Editor::ShowGameObjectWindow()
 
         int trianged_count = scene.game_object_list[item_selected_idx].mesh.Indices.size() / 3;
         ImGui::Text(std::format("triangle count: {}", trianged_count).c_str());
+
+        //从场景中删除这个对象
+        if (ImGui::Button("DELETE"))
+        {
+            const auto& obj_it = this->scene.game_object_list.begin() + item_selected_idx;
+            this->scene.game_object_list.erase(obj_it);
+
+            const auto& obj_transform_it = this->obj_transforms.begin() + item_selected_idx;
+            this->obj_transforms.erase(obj_transform_it);
+
+            const auto& obj_anim_it = this->obj_anims.begin() + item_selected_idx;
+            this->obj_anims.erase(obj_anim_it);
+
+            item_selected_idx = -1;
+        }
     }
 
     ImGui::End();
@@ -334,6 +388,114 @@ void Editor::GlobalShortcut()
     // ctrl + alt + g
     if (Ctrl_Alt_Down && ImGui::IsKeyPressed(ImGuiKey_G))
         this->show_game_object_window = true;
+
+    // ctrl + alt + q
+    if (Ctrl_Alt_Down && ImGui::IsKeyPressed(ImGuiKey_Q))
+        this->exit_the_program = true;
+}
+
+void Editor::ShowCameraAnimWindow()
+{
+    if (!this->show_camera_anim_window)
+        return;
+    ImGui::Begin("Camera Anim Window", &this->show_camera_window);
+
+    // ... 原有的滑动条 ...
+    // --- 新增：动画控制部分 ---
+    ImGui::SeparatorText("Camera Animation (Auto Move)");
+
+    // 技巧：提供一个按钮 "Record Start Position" 从当前摄像机位置捕获数据，避免手动输入坐标
+    if (ImGui::Button("Set Start to Current")) {
+        camera_anim.start_eye = this->camera_eye_position;
+        camera_anim.start_lookat = this->camera_lookat_position;
+    }
+
+    // 输入起点坐标 (也可以做成可拖拽的)
+    ImGui::DragFloat3("Start Eye", &camera_anim.start_eye.x, 0.1f);
+    ImGui::DragFloat3("Start LookAt", &camera_anim.start_lookat.x, 0.1f);
+    if (ImGui::Button("Set Target to Current")) {
+        camera_anim.end_eye = this->camera_eye_position;
+        camera_anim.end_lookat = this->camera_lookat_position;
+    }
+    // 输入终点坐标
+    ImGui::DragFloat3("Target Eye", &camera_anim.end_eye.x, 0.1f);
+    ImGui::DragFloat3("Target LookAt", &camera_anim.end_lookat.x, 0.1f);
+
+    // 动画时长
+    ImGui::DragFloat("Duration (seconds)", &camera_anim.duration, 0.1f, 0.1f, 10.0f);
+    // 播放按钮
+    if (ImGui::Button("Play Animation")) {
+        // 重置状态
+        camera_anim.elapsed_time = 0.0f;
+        camera_anim.is_playing = true;
+
+        this->camera_eye_position = camera_anim.start_eye;
+    }
+    ImGui::End();
+}
+
+void Editor::ShowGameObjectAnimWindow()
+{
+    if (!this->show_game_object_anim_window)
+        return;
+    ImGui::Begin("GameObject Anim Window", &this->show_game_object_anim_window);
+
+    // 播放所有启用的动画
+    if (ImGui::Button("Play All Enabled"))
+    {
+        for (auto& anim : this->obj_anims)
+        {
+            if (anim.is_enabled)
+            {
+                anim.is_playing = true;
+                anim.elapsed_time = 0.0f; // 重置时间
+            }
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Stop All"))
+    {
+        for (auto& anim : this->obj_anims)
+        {
+            anim.is_playing = false;
+        }
+    }
+
+    ImGui::Separator();
+
+    // 遍历每个对象生成控制面板
+    for (int i = 0; i < this->obj_anims.size(); i++)
+    {
+        auto& anim = this->obj_anims[i];
+        std::string label = "Object [" + std::to_string(i) + "]";
+
+        if (ImGui::CollapsingHeader(label.c_str()))
+        {
+            ImGui::PushID(i); // 确保每个对象的 ID 唯一，防止 DragFloat 冲突
+
+            // 1. 启用开关
+            ImGui::Checkbox("Enable Anim", &anim.is_enabled);
+
+            // 2. 持续时间
+            ImGui::DragFloat("Duration (s)", &anim.duration, 0.1f, 0.1f, 10.0f);
+
+            // 3. 捕获按钮：一键设置起点和终点
+            if (ImGui::Button("Capture Start (Current)"))
+            {
+                anim.start_transform = this->obj_transforms[i];
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Capture Target (Current)"))
+            {
+                anim.target_transform = this->obj_transforms[i];
+            }
+
+            ImGui::Separator();
+            ImGui::PopID();
+        }
+    }
+
+    ImGui::End();
 }
 
 void Editor::MoveSceneCamera()
@@ -381,7 +543,15 @@ void Editor::AddGameObjectFormFiles(const char* obj_filename, const char* yaml_f
     try
     {
         scene.AddGameObject(obj_filename, yaml_filename);
-        this->obj_transforms.push_back(scene.game_object_list.at(scene.game_object_list.size() - 1).transform);
+        const auto& new_obj = scene.game_object_list.at(scene.game_object_list.size() - 1);
+
+        // 同步添加 Transform
+        this->obj_transforms.push_back(new_obj.transform);
+        // 同步添加动画数据
+        CS::GameObjectAnim new_anim;
+        new_anim.start_transform = new_obj.transform; // 默认起点为当前位置
+        new_anim.target_transform = new_obj.transform; // 默认终点也为当前位置
+        this->obj_anims.push_back(new_anim);
         this->show_add_game_object_window = false;
     }
     catch (const std::exception& error)
@@ -419,6 +589,74 @@ void Editor::LoadSaveFile()
         std::getline(file, this->recently_opened_yaml_files[i]);
     }
     file.close();
+}
+
+void Editor::UpdateAnimations()
+{
+    float dt = io.DeltaTime;
+
+    if (!camera_anim.is_playing)
+        goto obj_anims;
+
+    camera_anim.elapsed_time += dt;
+
+    if (float t = camera_anim.elapsed_time / camera_anim.duration;
+        t >= 1.0f)
+    {
+        t = 1.0f;
+        camera_anim.is_playing = false; // 结束播放
+
+        // 强制设为终点，防止浮点误差
+        this->camera_eye_position = camera_anim.end_eye;
+        this->camera_lookat_position = camera_anim.end_lookat;
+    }
+    else
+    {
+        // 使用平滑插值，让镜头运动更像电影
+        float smooth_t = Math::Smoothstep(t);
+        // 计算当前位置
+        this->camera_eye_position = Lerp(camera_anim.start_eye, camera_anim.end_eye, smooth_t);
+        this->camera_lookat_position = Lerp(camera_anim.start_lookat, camera_anim.end_lookat, smooth_t);
+    }
+
+    obj_anims:
+    if (this->obj_anims.size() != this->obj_transforms.size())
+        return;
+
+    for (size_t i = 0; i < this->obj_anims.size(); i++)
+    {
+        auto& anim = this->obj_anims[i];
+        // 只有启用且正在播放时才更新
+        if (!anim.is_enabled || !anim.is_playing)
+            continue;
+        anim.elapsed_time += dt;
+        float t = anim.elapsed_time / anim.duration;
+        if (t >= 1.0f)
+        {
+            t = 1.0f;
+            anim.is_playing = false; // 播放结束
+
+            // 强设为终点
+            this->obj_transforms[i] = anim.target_transform;
+        }
+        else
+        {
+            // 计算平滑进度
+            float smooth_t = Math::Smoothstep(t);
+            // 对 Position, Rotation, Scale 分别进行 Lerp
+            // 注意：这里假设 Lerp 函数支持 Vector3d
+            this->obj_transforms[i].Position = Lerp(anim.start_transform.Position, anim.target_transform.Position, smooth_t);
+
+            this->obj_transforms[i].Rotation = Lerp(anim.start_transform.Rotation, anim.target_transform.Rotation, smooth_t);
+
+            this->obj_transforms[i].Scale = Lerp(anim.start_transform.Scale, anim.target_transform.Scale, smooth_t);
+        }
+    }
+}
+
+bool Editor::get_exit_the_program() const
+{
+    return this->exit_the_program;
 }
 
 float Editor::get_camera_near() const
