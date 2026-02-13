@@ -7,15 +7,14 @@
 
 #include <vector>
 
-#include "SceneData/camera.h"
 #include "SceneData/transform.h"
 #include "SceneData/scene.h"
 #include "Renderer/view_port.h"
 #include "Renderer/scene_renderer.h"
 
-#include "camera_anim.h"
-#include "game_object_anim.h"
 #include "imgui.h"
+
+#include "animation.h"
 
 namespace CS
 {
@@ -48,8 +47,8 @@ public:
     /* 展示摄像机动画编辑窗口 */
     void ShowCameraAnimWindow();
 
-    /* 展示GameObject动画编辑窗口 */
-    void ShowGameObjectAnimWindow();
+    /* 显示GameObject动画编辑窗口 */
+    void ShowAnimationEditorWindow();
 
 public:
 
@@ -64,9 +63,11 @@ public:
     /* 加载保存文件 */
     void LoadSaveFile();
 
-    /* 更新动画 */
-    void UpdateAnimations();
+    /* 系统更新 */
+    void UpdateAnimationSystem();
 
+    /* 播放/停止所有已启用的动画 */
+    void PlayAllAnimations(bool play);
 
 public:
     float get_camera_near() const;
@@ -126,14 +127,14 @@ private:
     float camera_yaw_sensitivity    = 0.001; // 水平旋转灵敏度 (偏航)，每像素移动多少度
     float camera_pitch_sensitivity  = 0.001; // 垂直旋转灵敏度 (俯仰)，每像素移动多少度
 
-    CameraAnim camera_anim; //摄像机动画参数
-
 
     //每个对象的transform
     std::vector<CS::SceneData::Transform> obj_transforms;
 
-    // 存储每个对象的动画数据，索引必须与 obj_transforms 和 scene.game_object_list 严格对应
-    std::vector<CS::GameObjectAnim> obj_anims;
+    CameraAnimClip camera_anim_clip;   // 包含 Eye 和 LookAt 两条轨道
+    AnimPlayerState camera_anim_state; // 播放状态
+    std::vector<CS::AnimationClip> obj_anim_clips;      // 动画数据 (位置、旋转等)
+    std::vector<CS::AnimPlayerState> obj_anim_states;   // 播放状态
 
 
     /* 窗口控制变量 */
@@ -144,7 +145,7 @@ private:
 
     /* 动画窗口 */
     bool show_camera_anim_window = false;
-    bool show_game_object_anim_window = false;
+    bool show_animation_editor_window = false;
 
     /* imgui的Debug Log窗口 */
     bool show_imgui_debug_log_window = false;

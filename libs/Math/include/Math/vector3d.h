@@ -93,6 +93,8 @@ public:
     Vector3d operator-(const Vector3d& V) const;
     Vector3d& operator-=(const Vector3d& V);
 
+    Vector3d operator-() const;
+
     /* 向量标量乘法 */
     Vector3d operator*(float Scale) const;
     Vector3d& operator*=(float Scale);

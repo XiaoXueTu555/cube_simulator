@@ -28,6 +28,7 @@ add_library(Editor)
 target_sources(Editor
     PRIVATE
         Editor.cpp
+        animation.cpp
     PUBLIC
         FILE_SET HEADERS
         BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}

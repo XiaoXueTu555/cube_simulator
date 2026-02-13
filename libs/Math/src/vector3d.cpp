@@ -106,6 +106,11 @@ Vector3d& Vector3d::operator-=(const Vector3d& V)
     return *this;
 }
 
+Vector3d Vector3d::operator-() const
+{
+    return Vector3d{-x, -y, -z};
+}
+
 Vector3d Vector3d::operator*(float Scale) const
 {
     return Vector3d{this->x * Scale, this->y * Scale, this->z * Scale};
