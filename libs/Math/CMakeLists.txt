@@ -44,7 +44,8 @@ list(APPEND matrix_source_files
 
 add_library(Math
         src/clip_plane.cpp
-        src/lerp.cpp)
+        src/lerp.cpp
+        src/clip.cpp)
 
 target_sources(Math
         PRIVATE
