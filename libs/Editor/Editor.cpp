@@ -215,7 +215,7 @@ void Editor::ShowCameraWindow()
     ImGui::Begin("Camera Window", &this->show_camera_window);
     ImGui::DragFloat("Camera Near",&camera_near,0.001, CS_KINDA_SMALL_NUMBER * 10,5, "%.3f", ImGuiSliderFlags_AlwaysClamp);
     ImGui::DragFloat("Camera Far",&camera_far,0.01,CS_KINDA_SMALL_NUMBER * 10,1000, "%.3f", ImGuiSliderFlags_AlwaysClamp);
-    ImGui::DragFloat("Camera FOV",&camera_fov,0.01,CS_AngleToRadian(34.0f),CS_AngleToRadian(71.0f), "%.3f", ImGuiSliderFlags_AlwaysClamp);
+    ImGui::DragFloat("Camera FOV",&camera_fov,0.01,34.0f, 71.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
     ImGui::Text("Camera Aspect Ratio: 16.0f / 9.0f");
     ImGui::Text("");
 
